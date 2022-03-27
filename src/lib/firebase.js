@@ -3,14 +3,13 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 // Initialize Firebase.
-// These details will need to be replaced with the project specific env vars at the start of each new cohort.
 const firebaseConfig = {
-  apiKey: API_KEY,
-  authDomain: AUTH_DOMAIN,
-  projectId: PROJECT_ID,
-  storageBucket: STORAGE_BUCKET,
-  messagingSenderId: MESSAGING_SENDER_ID,
-  appId: APP_ID
+  apiKey: "AIzaSyBeFEkcFZx2TqClBWUDIKjZSghCDab1f8w",
+  authDomain: "tcl-42-smart-shopping-list.firebaseapp.com",
+  projectId: "tcl-42-smart-shopping-list",
+  storageBucket: "tcl-42-smart-shopping-list.appspot.com",
+  messagingSenderId: "469012788527",
+  appId: "1:469012788527:web:ce86b7c28a9ed2f26b9dda"
 };
 
 export const app = initializeApp(firebaseConfig);
