@@ -7,6 +7,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 - [Manjiri Phatak](https://github.com/manjiriphatak)🍾
 
 ## Cohort Participants
+- [Timothy Taylor](https://github.com/timothy-taylor) 🌱
 
 ## Mentors
 
