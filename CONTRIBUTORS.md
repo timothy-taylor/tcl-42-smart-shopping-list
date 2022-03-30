@@ -10,6 +10,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 - [Timothy Taylor](https://github.com/timothy-taylor) 🌱
 - [Rebecca Beard](https://github.com/rjwbeard) 🤠
+- [Shirene Boyd](https://github.com/shirenekboyd) :biking_woman:  
 
 ## Mentors
 
