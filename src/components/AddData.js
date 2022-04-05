@@ -1,17 +1,16 @@
 import React from 'react';
 import { db } from '../lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function AddData() {
-// const [item, setItem] = useState(" ");
 
 async function handleClick(e) {
      e.preventDefault();
     // console.log(db)
 
     try {
-      const docRef = await setDoc(doc(db, 'lists'), {
-        // property: 'value',
+      const colRef = collection(db, "users");
+      const docRef = await addDoc(colRef, {
         item: 'bread',
       });
       console.log('Document written with ID: ', docRef.id);
