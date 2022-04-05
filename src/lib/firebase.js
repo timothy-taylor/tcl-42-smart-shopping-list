@@ -1,6 +1,6 @@
 // NOTE: import only the Firebase modules that you need in your app.
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import  { getFirestore }  from 'firebase/firestore/lite';
 
 // Initialize Firebase.
 const firebaseConfig = {
