@@ -1,12 +1,16 @@
 import React from 'react';
 import './App.css';
 import AddData from './components/AddData';
+import ShowData from './components/ShowData';
 
 function App() {
 
 
   return (
-    <AddData />
+    <div>
+      <AddData />
+      <ShowData />
+    </div>
   );
 }
 

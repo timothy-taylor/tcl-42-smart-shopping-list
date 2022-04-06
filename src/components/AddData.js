@@ -26,7 +26,7 @@ async function handleClick(e) {
         <ul id="shopping-list"></ul>
       </div>
       <button type="button" onClick={(e) => handleClick(e)}>
-        Create New List
+        Add Data
       </button>
     </div>
   );
