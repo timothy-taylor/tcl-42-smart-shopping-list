@@ -1,0 +1,8 @@
+.navigation{
+    position:fixed;
+    bottom: 0;
+    padding-bottom: 6.5rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}

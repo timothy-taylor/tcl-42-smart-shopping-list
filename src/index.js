@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import RouterSwitch from "./components/RouterSwitch";
+import App from "./App"
 
-ReactDOM.render(<RouterSwitch />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));

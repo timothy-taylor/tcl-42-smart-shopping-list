@@ -1,16 +1,11 @@
 import { NavLink } from 'react-router-dom';
+import "./Navigation.css";
 
 const Navigation = () => {
-  const styles = {
-    position: 'fixed',
-    bottom: 100,
-    left: 0,
-    width: '100%',
-    textAlign: 'center',
-  };
+ 
 
   return (
-    <nav style={styles}>
+    <nav className='navigation'>
       <NavLink
         to="/"
         style={({isActive}) => ({
