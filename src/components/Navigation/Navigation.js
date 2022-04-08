@@ -1,14 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import "./Navigation.css";
+import './Navigation.css';
 
 const Navigation = () => {
- 
-
   return (
-    <nav className='navigation'>
+    <nav className="navigation">
       <NavLink
         to="/"
-        style={({isActive}) => ({
+        style={({ isActive }) => ({
           fontWeight: isActive ? 'bold' : 'normal',
           padding: '4px',
         })}
@@ -17,7 +15,7 @@ const Navigation = () => {
       </NavLink>
       <NavLink
         to="/addItem"
-        style={({isActive}) => ({
+        style={({ isActive }) => ({
           fontWeight: isActive ? 'bold' : 'normal',
           padding: '4px',
         })}
