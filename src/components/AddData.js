@@ -6,7 +6,6 @@ export default function AddData() {
 
 async function handleClick(e) {
      e.preventDefault();
-    // console.log(db)
 
     try {
       const colRef = collection(db, "users");

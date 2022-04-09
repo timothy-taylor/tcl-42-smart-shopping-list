@@ -14,17 +14,15 @@ const ShowData = () => {
     return () => unsubscribe();
   }, []);
 
-  //   console.log('this is docs--', docs);
-
   return (
     <div>
+      <ul>
       {docs.map((doc) => {
         return (
-          <ul>
-            <li>{doc.id}</li>
-          </ul>
+            <li key={doc.id}>{doc.id}</li>
         );
       })}
+      </ul>
     </div>
   );
 };
