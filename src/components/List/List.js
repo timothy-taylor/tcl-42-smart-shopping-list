@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../lib/firebase';
+import { db } from '../../lib/firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
+import Navigation from '../Navigation/Navigation';
 
-const ShowData = () => {
+const List = () => {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
@@ -15,16 +16,15 @@ const ShowData = () => {
   }, []);
 
   return (
-    <div>
+    <>
+      <Navigation />
       <ul>
-      {docs.map((doc) => {
-        return (
-            <li key={doc.id}>{doc.id}</li>
-        );
-      })}
+        {docs.map((doc) => {
+          return <li key={doc.id}>{doc.id}</li>;
+        })}
       </ul>
-    </div>
+    </>
   );
 };
 
-export default ShowData;
+export default List;

@@ -1,16 +1,17 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AddItem from './components/AddItem/AddItem';
+import List from './components/List/List';
 import './App.css';
-import AddData from './components/AddData';
-import ShowData from './components/ShowData';
 
 function App() {
-
-
   return (
-    <div>
-      <AddData />
-      <ShowData />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<List />} />
+        <Route path="/addItem" element={<AddItem />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
