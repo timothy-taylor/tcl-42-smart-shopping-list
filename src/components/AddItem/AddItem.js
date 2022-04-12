@@ -8,22 +8,25 @@ const AddItem = () => {
   const [purchaseFreq, setPurchaseFreq] = useState('');
 
   async function handleClick(e) {
-    setItemName(e.target.value);
-
+    await setItemName(e.target.value);
+    await setPurchaseFreq(e.target.value);
 
     try {
       const colRef = collection(db, 'users');
       const docRef = await addDoc(colRef, {
         item: {itemName},
+        purchase: {purchaseFreq}
       });
       console.log('Document written with ID: ', docRef.id);
+      console.log('Saved state of frequenxy', purchaseFreq);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
   }
 
-  function handleItemChange(event) {
-  }
+  // function handleFreqChange(e){
+  //   setPurchaseFreq(e.target.value);
+  // }
 
 
 
@@ -46,19 +49,19 @@ const AddItem = () => {
         <form>
           <div className="radio">
             <label>
-              <input type="radio" value="soon" />
+              <input name="frequency" type="radio" value="7" checked={purchaseFreq === "7"} onChange={(e)=>{setPurchaseFreq(e.target.value)}} />
               Soon
             </label>
           </div>
           <div className="radio">
             <label>
-              <input type="radio" value="kinda" />
+              <input name="frequency" type="radio" value="14" onClick={setPurchaseFreq} checked={purchaseFreq === "14"} onChange={(e)=>{setPurchaseFreq(e.target.value)}}/>
               Kinda soon
             </label>
           </div>
           <div className="radio">
             <label>
-              <input type="radio" value="not" />
+              <input name="frequency" type="radio" value="30" onClick={setPurchaseFreq} checked={purchaseFreq === "30"} onChange={(e)=>{setPurchaseFreq(e.target.value)}}/>
               Not soon
             </label>
           </div>
