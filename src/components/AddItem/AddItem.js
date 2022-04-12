@@ -28,6 +28,9 @@ const AddItem = () => {
   //   setPurchaseFreq(e.target.value);
   // }
 
+  //for last purchase date
+  //hypothetically, we could do a created at stamp. In which, whenever the item was added to the list, that data is then "created" at that day and time.
+  //so dynamically, we can add +7, +14, +30 to the day that it was created
 
 
   return (
