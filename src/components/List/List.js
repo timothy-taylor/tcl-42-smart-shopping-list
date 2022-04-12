@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
+import { useParams } from 'react-router-dom';
 
 const List = () => {
+  const { token } = useParams();
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ const List = () => {
 
   return (
     <>
-      <Navigation />
+      <Navigation token={token} />
       <ul>
         {docs.map((doc) => {
           return <li key={doc.id}>{doc.id}</li>;
