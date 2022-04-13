@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { getToken, words } from '@the-collab-lab/shopping-list-utils';
+import { parseToken } from '../../lib/util';
+
 
 const Welcome = () => {
   const [token, setToken] = React.useState(
@@ -9,7 +11,8 @@ const Welcome = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    setToken(getToken(words));
+    const parsedToken = parseToken(getToken(words));
+    setToken(parsedToken);
   };
 
   React.useEffect(() => {
