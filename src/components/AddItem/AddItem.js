@@ -6,16 +6,25 @@ import Navigation from '../Navigation/Navigation';
 const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('');
+  const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
+  const date = new Date();
 
   async function handleClick(e) {
     await setItemName(e.target.value);
     await setPurchaseFreq(e.target.value);
+    await setLastPurchaseDate(e.target.value);
+
+const purchaseDate = lastPurchaseDate.setDate(lastPurchaseDate.getDate() + {purchaseFreq});
+console.log("This is the next purchase date", purchaseDate.toDateString());
 
     try {
       const colRef = collection(db, 'users');
+      //db.collection('users).get().then((snapshot) => {snapshot.docs.forEach(doc => console.log(doc.data))})
       const docRef = await addDoc(colRef, {
         item: {itemName},
-        purchase: {purchaseFreq}
+        purchase: {purchaseFreq},
+        createdAt: date,
+        purchaseDate: purchaseDate
       });
       console.log('Document written with ID: ', docRef.id);
       console.log('Saved state of frequenxy', purchaseFreq);
