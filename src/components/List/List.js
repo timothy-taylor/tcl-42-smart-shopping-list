@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot} from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 
 const List = () => {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
-      const snapshotDocs = [];
-      snapshot.forEach((doc) => snapshotDocs.push(doc));
-      setDocs(snapshotDocs);
-    });
-    return () => unsubscribe();
+
+    const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+      setDocs(snapshot.docs.map(doc => {
+        return {
+          id: doc.id,
+          ...doc.data()
+        }
+      }));
+  });
+    return unsub;
   }, []);
 
   return (
@@ -20,7 +24,7 @@ const List = () => {
       <Navigation />
       <ul>
         {docs.map((doc) => {
-          return <li key={doc.id}>{doc.id}</li>;
+          return <li key={doc.id}>{doc.item}</li>;
         })}
       </ul>
     </>
