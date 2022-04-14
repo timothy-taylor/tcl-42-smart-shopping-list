@@ -29,9 +29,7 @@ const AddItem = () => {
         <form id="add-shopping-list-form"></form>
         <ul id="shopping-list"></ul>
       </div>
-      <button onClick={(e) => handleClick(e)}>
-        Add Data
-      </button>
+      <button onClick={(e) => handleClick(e)}>Add Data</button>
     </>
   );
 };
