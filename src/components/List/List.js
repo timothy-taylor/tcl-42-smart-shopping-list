@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, onSnapshot} from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 
 const List = () => {
@@ -25,7 +25,7 @@ const List = () => {
       <Navigation />
       <ul>
         {docs.map((doc) => {
-          return <li key={doc.id}>{doc.item}</li>;
+          return <li key={doc.id}>{doc.item.itemName}</li>;
         })}
       </ul>
     </>
