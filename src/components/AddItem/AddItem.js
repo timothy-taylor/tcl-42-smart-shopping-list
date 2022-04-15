@@ -1,30 +1,29 @@
 import React, { useState } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 
 const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
-  const date = new Date();
+  // const date = new Date();
 
   async function handleClick(e) {
     await setItemName(e.target.value);
     await setPurchaseFreq(e.target.value);
     await setLastPurchaseDate(e.target.value);
 
-const purchaseDate = lastPurchaseDate.setDate(lastPurchaseDate.getDate() + {purchaseFreq});
-console.log("This is the next purchase date", purchaseDate.toDateString());
+    // const purchaseDate = lastPurchaseDate.setDate(lastPurchaseDate.getDate() + {purchaseFreq});
+    // console.log("This is the next purchase date", purchaseDate.toDateString());
 
     try {
       const colRef = collection(db, 'users');
-      //db.collection('users).get().then((snapshot) => {snapshot.docs.forEach(doc => console.log(doc.data))})
       const docRef = await addDoc(colRef, {
-        item: {itemName},
-        purchase: {purchaseFreq},
-        createdAt: date,
-        purchaseDate: purchaseDate
+        item: { itemName },
+        purchase: { purchaseFreq },
+        createdAt: serverTimestamp(),
+        purchaseDate: { lastPurchaseDate },
       });
       console.log('Document written with ID: ', docRef.id);
       console.log('Saved state of frequenxy', purchaseFreq);
@@ -40,7 +39,6 @@ console.log("This is the next purchase date", purchaseDate.toDateString());
   //for last purchase date
   //hypothetically, we could do a created at stamp. In which, whenever the item was added to the list, that data is then "created" at that day and time.
   //so dynamically, we can add +7, +14, +30 to the day that it was created
-
 
   return (
     <>
@@ -61,19 +59,45 @@ console.log("This is the next purchase date", purchaseDate.toDateString());
         <form>
           <div className="radio">
             <label>
-              <input name="frequency" type="radio" value="7" checked={purchaseFreq === "7"} onChange={(e)=>{setPurchaseFreq(e.target.value)}} />
+              <input
+                name="frequency"
+                type="radio"
+                value="7"
+                checked={purchaseFreq === '7'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
               Soon
             </label>
           </div>
           <div className="radio">
             <label>
-              <input name="frequency" type="radio" value="14" onClick={setPurchaseFreq} checked={purchaseFreq === "14"} onChange={(e)=>{setPurchaseFreq(e.target.value)}}/>
+              <input
+                name="frequency"
+                type="radio"
+                value="14"
+                onClick={setPurchaseFreq}
+                checked={purchaseFreq === '14'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
               Kinda soon
             </label>
           </div>
           <div className="radio">
             <label>
-              <input name="frequency" type="radio" value="30" onClick={setPurchaseFreq} checked={purchaseFreq === "30"} onChange={(e)=>{setPurchaseFreq(e.target.value)}}/>
+              <input
+                name="frequency"
+                type="radio"
+                value="30"
+                onClick={setPurchaseFreq}
+                checked={purchaseFreq === '30'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
               Not soon
             </label>
           </div>
