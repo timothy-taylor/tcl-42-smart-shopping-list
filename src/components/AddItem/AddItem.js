@@ -5,7 +5,7 @@ import Navigation from '../Navigation/Navigation';
 
 const AddItem = () => {
   const [itemName, setItemName] = useState('');
-  const [purchaseFreq, setPurchaseFreq] = useState('');
+  const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
   // const date = new Date();
 
@@ -20,7 +20,7 @@ const AddItem = () => {
     try {
       const colRef = collection(db, 'users');
       const docRef = await addDoc(colRef, {
-        item: { itemName },
+        item: itemName,
         purchase: { purchaseFreq },
         createdAt: serverTimestamp(),
         purchaseDate: { lastPurchaseDate },
