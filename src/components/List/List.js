@@ -27,7 +27,7 @@ const List = () => {
       <Navigation token={token} />
       <ul>
         {docs.map((doc) => {
-          return <li key={doc.id}>{doc.item}</li>;
+          return <li key={doc.id}>{doc.item.itemName}</li>;
         })}
       </ul>
     </>
