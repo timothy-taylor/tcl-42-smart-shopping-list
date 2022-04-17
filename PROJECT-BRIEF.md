@@ -26,34 +26,34 @@ Pairings will go as follows:
 #### Week 2, April 10 - 16
 
 1. Rebecca & Timothy
-2. Shirene & Emily
+2. Shirene & Sarani
 
 #### Week 3, April 17 - 23
 
 1. Timothy & Shirene
-2. Emily & Rebecca
+2. Sarani & Rebecca
 
 #### Week 4, April 24 - 30
 
 1. Shirene & Rebecca
-2. Timothy & Emily
+2. Timothy & Sarani
 
 #### Week 5, May 1 - 7
 
 1. Rebecca & Timothy
-2. Shirene & Emily
+2. Shirene & Sarani
 
 #### Week 6, May 8 - 14
 
 1. Timothy & Shirene
-2. Emily & Rebecca
+2. Sarani & Rebecca
 
 #### Week 7, May 15 - 21
 
 1. Shirene & Rebecca
-2. Timothy & Emily
+2. Timothy & Sarani
 
 #### Week 8, May 22 - 28
 
 1. Rebecca & Timothy
-2. Shirene & Emily
+2. Shirene & Sarani
