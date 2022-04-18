@@ -1,0 +1,1 @@
+export const parseToken = token => token.replace(/\s+/g, '-'); 
