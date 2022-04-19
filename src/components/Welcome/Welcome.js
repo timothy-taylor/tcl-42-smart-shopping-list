@@ -18,7 +18,7 @@ const Welcome = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const parsedUserInput = parseToken(userInput);
-    const q = query(collection(db, parsedUserInput));
+    const q = query(collection(db, parsedUserInput), limit(1));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       setError("This token is not valid");
@@ -51,12 +51,14 @@ const Welcome = () => {
               type="text"
               placeholder="three word token"
               aria-label="three word token"
+              aria-errormessage="inputError"
+              aria-invalid={error ? true : false}
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
               required
             />
             <button type="submit">Join an existing list</button>
-            {error && <div>{error}</div>}
+            {error && <div id="inputError" style={{color: "red"}}>{error}</div>}
           </form>
         </>
       )}
