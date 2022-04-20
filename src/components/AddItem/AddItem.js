@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
@@ -8,33 +8,38 @@ const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
+  const [userList, setUserList] = useState([]);
 
   const { token } = useParams();
 
-  const getSnapshot = async () => {
-    const userList = [];
-    const querySnapshot = await getDocs(collection(db, token));
-    querySnapshot.forEach((doc) => {
-      userList.push(doc.data().item);
-    });
-    console.log(userList)
-    return userList;
-  };
-  getSnapshot();
+  useEffect(() => {
+    const getSnapshot = async () => {
+      const userList = [];
+      const querySnapshot = await getDocs(collection(db, token));
+      querySnapshot.forEach((doc) => {
+        userList.push(doc.data().item);
+      });
+      console.log(userList)
+      return userList;
+    };
+  }, []);
 
-  // const checkForDuplicates = (input, userList) => {
-  //   const normalizedInput = input.toLowerCase
-  //   for (let item of userList) {
-  //     if doc === input {
+  // const checkForDuplicates = async (input) => {
+  //   const currentList = await getSnapshot();
+  //   const normalizedInput = input.replace(/[^\W\s]/g, '');
+  //   console.log(normalizedInput);
+  //   for (let item of currentList) {
+  //     if (item === input) {
   //       throw new Error('This item is already on the list!')
-  //     };
-  //     if 
+  //     } else if (item === normalizedInput) {
+  //       throw new Error('This item is already on the list!')
+  //     }
+  //   return item;
   //   }
   // };
 
   async function handleClick(e) {
     e.preventDefault();
-
     try {
       const colRef = collection(db, token);
       const docRef = await addDoc(colRef, {
@@ -44,7 +49,7 @@ const AddItem = () => {
         purchaseDate: lastPurchaseDate,
       });
       console.log('Document written with ID: ', docRef.id);
-      console.log('Saved state of frequenxy', purchaseFreq);
+      console.log('Saved state of frequency', purchaseFreq);
       setItemName('')
       setPurchaseFreq('7')
     } catch (e) {
@@ -58,7 +63,6 @@ const AddItem = () => {
       <h1>Smart Shopping List</h1>
       <div>
         <form onSubmit={(e) => handleClick(e)}>
-          <label>
             <input
               type="text"
               required
@@ -67,7 +71,6 @@ const AddItem = () => {
               aria-label="item"
               onChange={(e) => setItemName(e.target.value)}
             ></input>
-          </label>
           <fieldset>
             <legend>Frequency</legend>
           <div className="radio">
