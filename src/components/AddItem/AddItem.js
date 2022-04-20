@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 import { useParams } from 'react-router-dom';
 
@@ -8,8 +8,28 @@ const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
+  const [userList, setUserList] = useState([]);
 
   const { token } = useParams();
+
+  const getSnapshot = async () => {
+    const querySnapshot = await getDocs(collection(db, token));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+  getSnapshot();
+
+  // const checkForDuplicates = (input, docs) => {
+  //   const normalizedInput = input.toLowerCase
+  //   for (let doc of docs) {
+  //     if doc === input {
+  //       throw new Error('This item is already on the list!')
+  //     };
+  //     if 
+  //   }
+  // };
 
   async function handleClick(e) {
     e.preventDefault();
