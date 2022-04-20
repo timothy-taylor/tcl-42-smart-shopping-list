@@ -8,22 +8,23 @@ const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
-  const [userList, setUserList] = useState([]);
 
   const { token } = useParams();
 
   const getSnapshot = async () => {
+    const userList = [];
     const querySnapshot = await getDocs(collection(db, token));
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      userList.push(doc.data().item);
     });
+    console.log(userList)
+    return userList;
   };
   getSnapshot();
 
-  // const checkForDuplicates = (input, docs) => {
+  // const checkForDuplicates = (input, userList) => {
   //   const normalizedInput = input.toLowerCase
-  //   for (let doc of docs) {
+  //   for (let item of userList) {
   //     if doc === input {
   //       throw new Error('This item is already on the list!')
   //     };
