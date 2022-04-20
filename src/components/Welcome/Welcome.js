@@ -10,7 +10,7 @@ const Welcome = () => {
   const [userInput, setUserInput] = React.useState('');
   const [error, setError] = React.useState(null);
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     const parsedToken = parseToken(getToken(words));
     setToken(parsedToken);
   };
@@ -21,13 +21,11 @@ const Welcome = () => {
     const q = query(collection(db, parsedUserInput), limit(1));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
-      setError("This token is not valid");
-      setUserInput("");
+      setError('This token is not valid');
+      setUserInput('');
     } else {
       setToken(parsedUserInput);
     }
-
-    console.log(querySnapshot.empty);
   };
 
   React.useEffect(() => {
@@ -58,7 +56,11 @@ const Welcome = () => {
               required
             />
             <button type="submit">Join an existing list</button>
-            {error && <div id="inputError" style={{color: "red"}}>{error}</div>}
+            {error && (
+              <div id="inputError" style={{ color: 'red' }}>
+                {error}
+              </div>
+            )}
           </form>
         </>
       )}
