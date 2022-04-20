@@ -9,7 +9,7 @@ const List = () => {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, token), (snapshot) => {
+    const unsub = onSnapshot(collection(db, token || "example"), (snapshot) => {
       setDocs(
         snapshot.docs.map((doc) => {
           return {

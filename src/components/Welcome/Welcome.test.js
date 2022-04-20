@@ -38,18 +38,37 @@ it('clicking the button calls setToken which triggers setItem useEffect', () => 
   expect(localStorage.setItem).toHaveBeenCalled();
 });
 
-it("user tries to input a token that doesn't exist", () => {
-  render(
-    <MemoryRouter>
-      <Welcome />
-    </MemoryRouter>,
-  );
-  const inputTextBox = screen.getByLabelText('Share token');
-  userEvent.type(inputTextBox, 'aldnfalhjtowaq');
-  const button = screen.getByRole('button', { name: 'Join an existing list' });
-  userEvent.click(button);
+// it("user tries to input a token that doesn't exist", async () => {
+//   render(
+//     <MemoryRouter>
+//       <Welcome />
+//     </MemoryRouter>,
+//   );
+  
+//   const inputTextBox = screen.getByLabelText('Share token');
+//   userEvent.type(inputTextBox, 'aldnfalhjtowaq');
+//   const button = screen.getByRole('button', { name: 'Join an existing list' });
+//   userEvent.click(button);
 
-  waitFor(() => {
-    expect(screen.getByText('This token is not valid')).toBeInTheDocument();
-  });
-});
+//   waitFor(() => {
+//   expect('This token is not valid').toBeInTheDocument();
+    
+//    });
+// });
+
+// //write a test for when user successfully inputs a correct token
+// it("user inputs a three word token that does exist", () => {
+//   render (
+//     <MemoryRouter>
+//       <Welcome />
+//     </MemoryRouter>
+//   );
+
+//   const inputTextBox = screen.getByPlaceholderText('three word token');
+//   userEvent.type(inputTextBox, 'mccoy thule morel');
+//   const button = screen.getByRole('button', { name: 'Join an existing list'});
+//   userEvent.click(button);
+
+//   expect(screen.queryByText('This token is not valid')).not.toBeInTheDocument();
+  
+// })
