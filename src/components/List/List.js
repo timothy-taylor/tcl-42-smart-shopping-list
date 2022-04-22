@@ -9,7 +9,7 @@ const List = () => {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, token), (snapshot) => {
+    const unsub = onSnapshot(collection(db, token || "example"), (snapshot) => {
       setDocs(
         snapshot.docs.map((doc) => {
           return {
@@ -27,7 +27,7 @@ const List = () => {
       <Navigation token={token} />
       <ul>
         {docs.map((doc) => {
-          return <li key={doc.id}>{doc.item.itemName}</li>;
+          return <li key={doc.id}>{doc.item}</li>;
         })}
       </ul>
     </>

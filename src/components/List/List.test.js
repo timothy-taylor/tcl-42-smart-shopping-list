@@ -13,3 +13,5 @@ it('renders without crashing', () => {
   );
   ReactDOM.unmountComponentAtNode(div);
 });
+
+// write a test that 'when a user inputs a three word token, a list renders to the browser'
