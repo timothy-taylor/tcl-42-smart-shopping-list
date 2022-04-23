@@ -50,9 +50,15 @@ const AddItem = () => {
       items.push(doc.data().item);
     });
     //this is just setting the itemName to true or false
-    //now that this is working, we just need to do some logic that brings up the message 
+    const dup = items.some(item => item === itemName)
+    //now that this is working, we just need to do some logic that brings up the message which, i took the model Rebecca was trying to give it a shot
+    if(dup === true){
+      alert('Item added!')
+    } else if ( dup === false) {
+      throw new Error('Item already exists')
+    }
     //if true do this, if false do that
-    return items.some(item => item === itemName)
+    return dup
   };
 
   async function handleClick(e) {
