@@ -13,35 +13,15 @@ const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
-  const [userList, setUserList] = useState([]);
+  const [error, setError] = useState(null);
 
   const { token } = useParams();
 
-  // useEffect(() => {
-  //   const getSnapshot = async () => {
-  //     const userList = [];
-  //     const querySnapshot = await getDocs(collection(db, token));
-  //     querySnapshot.forEach((doc) => {
-  //       userList.push(doc.data().item);
-  //     });
-  //     console.log(userList)
-  //     return userList;
-  //   };
-  // }, []);
-
-  // const checkForDuplicates = async (input) => {
-  //   const currentList = await getSnapshot();
-  //   const normalizedInput = input.replace(/[^\W\s]/g, '');
-  //   console.log(normalizedInput);
-  //   for (let item of currentList) {
-  //     if (item === input) {
-  //       throw new Error('This item is already on the list!')
-  //     } else if (item === normalizedInput) {
-  //       throw new Error('This item is already on the list!')
-  //     }
-  //   return item;
-  //   }
-  // };
+  const normalizeInput = listItem => {
+    const normalizedInput = listItem.toUpperCase().replace(/[^\w\s]|_/g, "")
+    .replace(/\s+/g, " ");
+    return normalizedInput;
+  };
 
   const checkForDuplicates = async () => {
     const items = [];
@@ -49,17 +29,18 @@ const AddItem = () => {
     querySnapshot.forEach((doc) => {
       items.push(doc.data().item);
     });
-    //this is just setting the itemName to true or false
-    //now that this is working, we just need to do some logic that brings up the message 
-    //if true do this, if false do that
-    return items.some(item => item === itemName)
+    return items.some(item => normalizeInput(item) === normalizeInput(itemName));
   };
 
   async function handleClick(e) {
     e.preventDefault();
     try {
      const check = await checkForDuplicates();
-     console.log('dup', check)
+     console.log('dup?', check);
+     if (check) {
+      setError('This item is already on your list!');
+      setItemName('');
+     } else {
       const colRef = collection(db, token);
       const docRef = await addDoc(colRef, {
         item: itemName,
@@ -71,6 +52,7 @@ const AddItem = () => {
       console.log('Saved state of frequency', purchaseFreq);
       setItemName('');
       setPurchaseFreq('7');
+     }
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -137,6 +119,7 @@ const AddItem = () => {
           </fieldset>
           <button type="submit">Add Data</button>
         </form>
+        <div style={{color: 'red'}}>{error}</div>
       </div>
     </>
   );
