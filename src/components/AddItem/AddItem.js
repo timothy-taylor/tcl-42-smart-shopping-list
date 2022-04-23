@@ -53,9 +53,9 @@ const AddItem = () => {
     const dup = items.some(item => item === itemName)
     //now that this is working, we just need to do some logic that brings up the message which, i took the model Rebecca was trying to give it a shot
     if(dup === true){
-      alert('Item added!')
+      alert('Item exists')
     } else if ( dup === false) {
-      throw new Error('Item already exists')
+      alert('Item added!')
     }
     //if true do this, if false do that
     return dup
