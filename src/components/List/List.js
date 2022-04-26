@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
 
@@ -22,6 +28,12 @@ const List = () => {
     return unsub;
   }, []);
 
+  async function onChange() {
+    await updateDoc(doc(db, token), {
+      purchaseDate: serverTimestamp(),
+    });
+  }
+
   return (
     <>
       <h1>Smart Shopping List</h1>
@@ -37,9 +49,20 @@ const List = () => {
         <>
           <ul>
             {docs.map((doc) => {
-              return <li key={doc.id}>{doc.item}</li>;
+              return (
+                <li key={doc.id}>
+                  {' '}
+                  <input
+                    key={`checkbox-${doc.id}`}
+                    type="checkbox"
+                    id={`checkbox-${doc.id}`}
+                    value={doc.purchaseDate ? true : false}
+                  ></input>
+                  {doc.item}
+                </li>
+              );
             })}
-          </ul>{' '}
+          </ul>
         </>
       )}
     </>
