@@ -13,36 +13,59 @@ import { useParams, Link } from 'react-router-dom';
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
+  const [checkedState, setCheckedState] = useState([]);
+
+  const timeDifference = (timestamp) => {
+    const dayInMilli = 86400000;
+    const date = Date.now();
+    const timestampInMilli = timestamp.toMillis();
+    const difference = date - timestampInMilli;
+    const comparison = difference < dayInMilli;
+
+    console.log(`${difference} = ${date} - ${timestampInMilli}`);
+    console.log(`${comparison} = ${difference} < ${dayInMilli}`);
+
+    // this will return true when its less than 24 hours
+    // false otherwise
+    return comparison;
+  };
+
+  async function checkboxChange(checked, id) {
+    console.log('checkbox clicked, checked: ', checked);
+  
+    // three different possible states
+    // 1: purchaseDate is null, checkbox is unchecked => checking it runs servertimestamp
+    // 2: purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
+    // 3: purchaseDate exists, checkbox is unchecked => checking runs serverTimestamp
+
+    await updateDoc(doc(db, token, id), {
+      purchaseDate: checked ? null : serverTimestamp(),
+    });
+  }
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, token || 'example'), (snapshot) => {
-      setDocs(
-        snapshot.docs.map((doc) => {
+    let unsubscribe;
+
+    if (token)
+      unsubscribe = onSnapshot(collection(db, token), (snapshot) => {
+        const docsFromSnapshot = snapshot.docs.map((doc) => {
           return {
             id: doc.id,
             ...doc.data(),
           };
-        }),
-      );
-    });
-    return unsub;
-  }, []);
+        });
 
-  async function checkboxChange(id) {
-    await updateDoc(doc(db, token, id), {
-      purchaseDate: serverTimestamp(),
-    });
-  }
+        setDocs(docsFromSnapshot);
+        setCheckedState(
+          docsFromSnapshot.map((doc) =>
+            doc.purchaseDate && timeDifference(doc.purchaseDate) ? true : false,
+          ),
+        );
+      });
 
-  const timeDifference = () => {
-    const dateNow = new Date()
-    const difference = dateNow - Date.parse(doc.purchaseDate);
-    const comparison = difference > 86400000;
-    console.log("This is the date", dateNow)
-    console.log(difference)
-    console.log(comparison) 
-    return comparison;
-  }
+    return unsubscribe;
+  }, [token]);
+
   return (
     <>
       <h1>Smart Shopping List</h1>
@@ -56,24 +79,25 @@ const List = () => {
         </div>
       ) : (
         <>
-          <ul>
-            {docs.map((doc) => {
+          <ul style={{ listStyle: "none" }}>
+            {docs.map((doc, i) => {
               return (
                 <li key={doc.id}>
-                  {' '}
                   <input
                     key={`checkbox-${doc.id}`}
                     type="checkbox"
                     id={`${doc.id}`}
-                    value={doc.purchaseDate ? true : false}
-                    checked={timeDifference()}
-                    onChange={(e) => checkboxChange(e.target.id)}
-                  ></input>
-                  {`${doc.item}-${doc.purchaseDate}-${doc.purchase}`}
+                    checked={checkedState[i]}
+                    onChange={(e) =>
+                      checkboxChange(checkedState[i], e.target.id)
+                    }
+                  />
+                  {`${doc.item}: ${doc.purchaseDate} @ ${doc.purchase} / ${checkedState[i]}`}
                 </li>
               );
             })}
           </ul>
+          {JSON.stringify(checkedState)}
         </>
       )}
     </>
