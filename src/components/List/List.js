@@ -10,29 +10,30 @@ import {
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
 
+export const timeDifference = (timestampInMilli) => {
+  if (!timestampInMilli) return false;
+
+  const dayInMilli = 86400000;
+  const date = Date.now();
+  const difference = date - timestampInMilli;
+  const comparison = difference < dayInMilli;
+
+  console.log(`${difference} = ${date} - ${timestampInMilli}`);
+  console.log(`${comparison} = ${difference} < ${dayInMilli}`);
+
+  // this will return true when its less than 24 hours
+  // false otherwise
+  return comparison;
+};
+
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
   const [checkedState, setCheckedState] = useState([]);
 
-  const timeDifference = (timestamp) => {
-    const dayInMilli = 86400000;
-    const date = Date.now();
-    const timestampInMilli = timestamp.toMillis();
-    const difference = date - timestampInMilli;
-    const comparison = difference < dayInMilli;
-
-    console.log(`${difference} = ${date} - ${timestampInMilli}`);
-    console.log(`${comparison} = ${difference} < ${dayInMilli}`);
-
-    // this will return true when its less than 24 hours
-    // false otherwise
-    return comparison;
-  };
-
   async function checkboxChange(checked, id) {
     console.log('checkbox clicked, checked: ', checked);
-  
+
     // three different possible states
     // 1: purchaseDate is null, checkbox is unchecked => checking it runs servertimestamp
     // 2: purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
@@ -58,7 +59,7 @@ const List = () => {
         setDocs(docsFromSnapshot);
         setCheckedState(
           docsFromSnapshot.map((doc) =>
-            doc.purchaseDate && timeDifference(doc.purchaseDate) ? true : false,
+            timeDifference(doc.purchaseDate?.toMillis()),
           ),
         );
       });
@@ -79,7 +80,7 @@ const List = () => {
         </div>
       ) : (
         <>
-          <ul style={{ listStyle: "none" }}>
+          <ul style={{ listStyle: 'none' }}>
             {docs.map((doc, i) => {
               return (
                 <li key={doc.id}>
