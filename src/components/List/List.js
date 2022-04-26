@@ -28,12 +28,21 @@ const List = () => {
     return unsub;
   }, []);
 
-  async function onChange() {
-    await updateDoc(doc(db, token), {
+  async function checkboxChange(id) {
+    await updateDoc(doc(db, token, id), {
       purchaseDate: serverTimestamp(),
     });
   }
 
+  const timeDifference = () => {
+    const dateNow = new Date()
+    const difference = dateNow - Date.parse(doc.purchaseDate);
+    const comparison = difference > 86400000;
+    console.log("This is the date", dateNow)
+    console.log(difference)
+    console.log(comparison) 
+    return comparison;
+  }
   return (
     <>
       <h1>Smart Shopping List</h1>
@@ -55,10 +64,12 @@ const List = () => {
                   <input
                     key={`checkbox-${doc.id}`}
                     type="checkbox"
-                    id={`checkbox-${doc.id}`}
+                    id={`${doc.id}`}
                     value={doc.purchaseDate ? true : false}
+                    checked={timeDifference()}
+                    onChange={(e) => checkboxChange(e.target.id)}
                   ></input>
-                  {doc.item}
+                  {`${doc.item}-${doc.purchaseDate}-${doc.purchase}`}
                 </li>
               );
             })}
