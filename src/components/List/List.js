@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../../lib/firebase';
 import {
   collection,
   doc,
@@ -7,6 +6,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
 
@@ -18,10 +18,10 @@ export const timeDifference = (timestampInMilli) => {
   const difference = date - timestampInMilli;
   const comparison = difference < dayInMilli;
 
-  console.log(`${difference} = ${date} - ${timestampInMilli}`);
-  console.log(`${comparison} = ${difference} < ${dayInMilli}`);
+  console.log(`differience in ms = ${difference} = ${date} - ${timestampInMilli}`);
+  console.log(`less than 24 hours = ${comparison} = ${difference} < ${dayInMilli}`);
 
-  // this will return true when its less than 24 hours
+  // this will return true when its been less than 24 hours
   // false otherwise
   return comparison;
 };
@@ -29,13 +29,10 @@ export const timeDifference = (timestampInMilli) => {
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
-  const [checkedState, setCheckedState] = useState([]);
 
   async function checkboxChange(checked, id) {
-    console.log('checkbox clicked, checked: ', checked);
-
     // three different possible states
-    // 1: purchaseDate is null, checkbox is unchecked => checking it runs servertimestamp
+    // 1: purchaseDate is null, checkbox is unchecked => checking runs servertimestamp
     // 2: purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
     // 3: purchaseDate exists, checkbox is unchecked => checking runs serverTimestamp
 
@@ -49,18 +46,15 @@ const List = () => {
 
     if (token)
       unsubscribe = onSnapshot(collection(db, token), (snapshot) => {
-        const docsFromSnapshot = snapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        });
-
-        setDocs(docsFromSnapshot);
-        setCheckedState(
-          docsFromSnapshot.map((doc) =>
-            timeDifference(doc.purchaseDate?.toMillis()),
-          ),
+        setDocs(
+          snapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              checked: timeDifference(data.purchaseDate?.toMillis()),
+              ...data,
+            };
+          }),
         );
       });
 
@@ -81,24 +75,21 @@ const List = () => {
       ) : (
         <>
           <ul style={{ listStyle: 'none' }}>
-            {docs.map((doc, i) => {
+            {docs.map((doc) => {
               return (
                 <li key={doc.id}>
                   <input
                     key={`checkbox-${doc.id}`}
                     type="checkbox"
-                    id={`${doc.id}`}
-                    checked={checkedState[i]}
-                    onChange={(e) =>
-                      checkboxChange(checkedState[i], e.target.id)
-                    }
+                    id={doc.id}
+                    checked={doc.checked}
+                    onChange={(e) => checkboxChange(doc.checked, e.target.id)}
                   />
-                  {`${doc.item}: ${doc.purchaseDate} @ ${doc.purchase} / ${checkedState[i]}`}
+                  {doc.item}
                 </li>
               );
             })}
           </ul>
-          {JSON.stringify(checkedState)}
         </>
       )}
     </>
