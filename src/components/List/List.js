@@ -9,6 +9,7 @@ import {
 import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
 export const timeDifference = (timestampInMilli) => {
   if (!timestampInMilli) return false;
@@ -26,6 +27,7 @@ export const timeDifference = (timestampInMilli) => {
   return comparison;
 };
 
+
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
@@ -41,6 +43,21 @@ const List = () => {
       purchaseDate: checked ? null : serverTimestamp(),
     });
   }
+
+  //const calculateEstimate = (docs) => {
+    //doc.purchase + doc.purchaseDate = estimatedNextPurchase
+      //14 days + May 3, 2022 = May 17, 2022
+      //7 days + May 31, 2022 = June 7, 2022
+    //create another field for database called estimatedNextPurchase and call calculateEstimate with useEffect()
+    //if (docs.purchaseDate) {
+      //const nextPurchaseDate = Number(docs.purchase) + Number(docs.purchaseDate) 
+    //} else if (docs.purchaseDate === null){
+      //return true;
+      //keep estimatedNextPurchase the same;  maybe return true or something
+    //} else {
+      //return null;
+    //}
+    //}
 
   useEffect(() => {
     let unsubscribe;
