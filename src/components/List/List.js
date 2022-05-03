@@ -33,9 +33,9 @@ const List = () => {
 
   async function checkboxChange(checked, id) {
     // three different possible states
-    // 1: purchaseDate is null, checkbox is unchecked => checking runs servertimestamp
-    // 2: purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
-    // 3: purchaseDate exists, checkbox is unchecked => checking runs serverTimestamp
+    // 1) purchaseDate is null, checkbox is unchecked => checking runs servertimestamp
+    // 2) purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
+    // 3) purchaseDate exists, checkbox is unchecked => checking runs serverTimestamp
 
     await updateDoc(doc(db, token, id), {
       purchaseDate: checked ? null : serverTimestamp(),
@@ -83,10 +83,17 @@ const List = () => {
               onChange={(e) => setUserSearch(e.target.value)}
             />
           </label>
-          <button onClick={(e) => setUserSearch('')}>X</button>
+          <button onClick={() => setUserSearch('')}>X</button>
           <ul style={{ listStyle: 'none' }}>
             {docs
               .filter((doc) => {
+                // 1) if search input is blank / empty
+                // item will pass through filter
+                //
+                // 2) if search string is part of item name
+                // item will pass through filter
+                //
+                // 3) otherwise item will be filtered out
                 if (userSearch === '') {
                   return true;
                 } else if (
