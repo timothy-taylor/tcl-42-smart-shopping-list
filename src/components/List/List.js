@@ -18,8 +18,8 @@ export const timeDifference = (timestampInMilli) => {
   const difference = date - timestampInMilli;
   const comparison = difference < dayInMilli;
 
-  console.log(`differience in ms = ${difference} = ${date} - ${timestampInMilli}`);
-  console.log(`less than 24 hours = ${comparison} = ${difference} < ${dayInMilli}`);
+  // console.log(`difference in ms = ${difference} = ${date} - ${timestampInMilli}`);
+  // console.log(`less than 24 hours = ${comparison} = ${difference} < ${dayInMilli}`);
 
   // this will return true when its been less than 24 hours
   // false otherwise
@@ -29,6 +29,7 @@ export const timeDifference = (timestampInMilli) => {
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
+  const [userSearch, setUserSearch] = useState('');
 
   async function checkboxChange(checked, id) {
     // three different possible states
@@ -74,21 +75,42 @@ const List = () => {
         </div>
       ) : (
         <>
+          <label>
+            Filter items
+            <input
+              type="text"
+              value={userSearch}
+              onChange={(e) => setUserSearch(e.target.value)}
+            />
+          </label>
+          <button onClick={(e) => setUserSearch('')}>X</button>
           <ul style={{ listStyle: 'none' }}>
-            {docs.map((doc) => {
-              return (
-                <li key={doc.id}>
-                  <input
-                    key={`checkbox-${doc.id}`}
-                    type="checkbox"
-                    id={doc.id}
-                    checked={doc.checked}
-                    onChange={(e) => checkboxChange(doc.checked, e.target.id)}
-                  />
-                  {doc.item}
-                </li>
-              );
-            })}
+            {docs
+              .filter((doc) => {
+                if (userSearch === '') {
+                  return true;
+                } else if (
+                  doc.item.toLowerCase().includes(userSearch.toLowerCase())
+                ) {
+                  return true;
+                } else {
+                  return false;
+                }
+              })
+              .map((doc) => {
+                return (
+                  <li key={doc.id}>
+                    <input
+                      key={`checkbox-${doc.id}`}
+                      type="checkbox"
+                      id={doc.id}
+                      checked={doc.checked}
+                      onChange={(e) => checkboxChange(doc.checked, e.target.id)}
+                    />
+                    {doc.item}
+                  </li>
+                );
+              })}
           </ul>
         </>
       )}
