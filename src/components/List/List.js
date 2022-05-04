@@ -10,6 +10,7 @@ import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { getByDisplayValue } from '@testing-library/react';
 
 export const timeDifference = (timestampInMilli) => {
   if (!timestampInMilli) return false;
@@ -27,7 +28,6 @@ export const timeDifference = (timestampInMilli) => {
   return comparison;
 };
 
-
 const List = () => {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
@@ -38,26 +38,29 @@ const List = () => {
     // 1) purchaseDate is null, checkbox is unchecked => checking runs servertimestamp
     // 2) purchaseDate exists, checkbox is checked => unchecking sets purchaseDate to null
     // 3) purchaseDate exists, checkbox is unchecked => checking runs serverTimestamp
-
+    
     await updateDoc(doc(db, token, id), {
       purchaseDate: checked ? null : serverTimestamp(),
+      //  estimatedNextPurchaseDate: checked ? null : date.getDay(doc.purchaseDate) + Number(doc.purchaseFreq),
     });
   }
 
+  // our date ex: May, 4, 2022 at 7:51:23 AM UTC-5 needs to be converted to a number for the calculation above (.getDay())
+
   //const calculateEstimate = (docs) => {
-    //doc.purchase + doc.purchaseDate = estimatedNextPurchase
-      //14 days + May 3, 2022 = May 17, 2022
-      //7 days + May 31, 2022 = June 7, 2022
-    //create another field for database called estimatedNextPurchase and call calculateEstimate with useEffect()
-    //if (docs.purchaseDate) {
-      //const nextPurchaseDate = Number(docs.purchase) + Number(docs.purchaseDate) 
-    //} else if (docs.purchaseDate === null){
-      //return true;
-      //keep estimatedNextPurchase the same;  maybe return true or something
-    //} else {
-      //return null;
-    //}
-    //}
+  //doc.purchase + doc.purchaseDate = estimatedNextPurchase
+  //14 days + May 3, 2022 = May 17, 2022
+  //7 days + May 31, 2022 = June 7, 2022
+  //create another field for database called estimatedNextPurchase and call calculateEstimate with useEffect()
+  //if (docs.purchaseDate) {
+  //const nextPurchaseDate = Number(docs.purchase) + Number(docs.purchaseDate)
+  //} else if (docs.purchaseDate === null){
+  //return true;
+  //keep estimatedNextPurchase the same;  maybe return true or something
+  //} else {
+  //return null;
+  //}
+  //}
 
   useEffect(() => {
     let unsubscribe;

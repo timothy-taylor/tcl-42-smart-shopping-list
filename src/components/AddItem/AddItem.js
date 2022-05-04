@@ -8,12 +8,14 @@ import {
 } from 'firebase/firestore';
 import Navigation from '../Navigation/Navigation';
 import { useParams } from 'react-router-dom';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
 const AddItem = () => {
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
   const [error, setError] = useState(null);
+  const [estimatedNextPurchase, setEstimatedNextPurchase] = useState(null);
 
   const { token } = useParams();
 
@@ -44,9 +46,10 @@ const AddItem = () => {
       const colRef = collection(db, token);
       const docRef = await addDoc(colRef, {
         item: itemName,
-        purchase: purchaseFreq,
+        purchaseFreq: purchaseFreq,
         createdAt: serverTimestamp(),
         purchaseDate: lastPurchaseDate,
+        estimatedNextPurchaseDate: estimatedNextPurchase, //prints Nan to the firestore database
       });
       console.log('Document written with ID: ', docRef.id);
       console.log('Saved state of frequency', purchaseFreq);
