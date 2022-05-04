@@ -41,11 +41,11 @@ const List = () => {
     
     await updateDoc(doc(db, token, id), {
       purchaseDate: checked ? null : serverTimestamp(),
-      //  estimatedNextPurchaseDate: checked ? null : date.getDay(doc.purchaseDate) + Number(doc.purchaseFreq),
+        // estimatedNextPurchaseDate: checked ? null : doc.getDate(doc.purchaseDate) + Number(doc.purchaseFreq),
     });
   }
 
-  // our date ex: May, 4, 2022 at 7:51:23 AM UTC-5 needs to be converted to a number for the calculation above (.getDay())
+  // our date ex: May, 4, 2022 at 7:51:23 AM UTC-5 needs to be converted to a number for the calculation above (.getDate()) which will print a number between 1-31
 
   //const calculateEstimate = (docs) => {
   //doc.purchase + doc.purchaseDate = estimatedNextPurchase
