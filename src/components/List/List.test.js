@@ -1,29 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import List, { timeDifference } from './List';
+import List, { isLessThan24HoursOld, daysSincePurchase, DAY_IN_MILLISEC } from './List';
 import { BrowserRouter } from 'react-router-dom';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
-describe('timeDifference', () => {
+describe('calculateEstimate', () => {
+  it('runs calculateEstimate with less than two purchases', () => {
+    // parameters:
+    // previousEstimate(number)
+    // daysSinceLastPurchase(number)
+    // totalPurchases(number)
+    // return: a number in days
+    const returnValue = calculateEstimate(7, 5, 1);
+    expect(returnValue).toEqual(5);
+  });
+});
+
+describe('daysSincePurchase', () => {
+  it('runs with valid input', () => {
+    const numDays = 3;
+    const dateSinceLastPurchased = Date.now() - DAY_IN_MILLISEC * numDays;
+    const dateCreated = Date.now() - DAY_IN_MILLISEC * 7;
+    expect(daysSincePurchase(dateSinceLastPurchased,dateCreated)).toEqual(numDays);
+  });
+
+  it('runs with undefined input', () => {
+    const numDays = 5;
+    const dateCreated = Date.now() - DAY_IN_MILLISEC * numDays;
+    expect(daysSincePurchase(undefined,dateCreated)).toEqual(numDays);
+  });
+});
+
+describe('isLessThan24HoursOld', () => {
   const oneHourInMilliSec = 3600000;
 
-  it('runs timeDifference and returns true if the timestamp is less than 24 hours different than the current time', () => {
+  it('returns true if the timestamp is less than 24 hours different than the current time', () => {
     const timestamp = Date.now() - oneHourInMilliSec;
-    expect(timeDifference(timestamp)).toEqual(true);
+    expect(isLessThan24HoursOld(timestamp)).toEqual(true);
   });
 
-  it('runs timeDifference and returns false if the timestamp is more than 24 hours different than the current time', () => {
+  it('returns false if the timestamp is more than 24 hours different than the current time', () => {
     const timestamp = Date.now() - oneHourInMilliSec * 25;
-    expect(timeDifference(timestamp)).toEqual(false);
+    expect(isLessThan24HoursOld(timestamp)).toEqual(false);
   });
 
-  it('runs timeDifference and returns false if the timestamp is undefined', () => {
+  it('returns false if the timestamp is undefined', () => {
     const timestamp = undefined;
-    expect(timeDifference(timestamp)).toEqual(false);
+    expect(isLessThan24HoursOld(timestamp)).toEqual(false);
   });
 
-  it('runs timeDifference and returns false if the timestamp is null', () => {
+  it('returns false if the timestamp is null', () => {
     const timestamp = null;
-    expect(timeDifference(timestamp)).toEqual(false);
+    expect(isLessThan24HoursOld(timestamp)).toEqual(false);
   });
 });
 
