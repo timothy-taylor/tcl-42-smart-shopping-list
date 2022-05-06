@@ -26,13 +26,6 @@ export const daysSincePurchase = (timestampInMilli, dateCreatedInMilli) => {
   const differenceInMilli = date - workingTimestamp;
   const differenceInDays = differenceInMilli / DAY_IN_MILLISEC;
 
-  /* console.log(
-    `differenceInMilli = ${differenceInMilli} = ${date} - ${timestampInMilli}`,
-  );
-  console.log(
-    `differenceInDays = ${differenceInDays} = ${differenceInMilli} / ${DAY_IN_MILLISEC}`,
-  ); */
-
   return differenceInDays;
 };
 
@@ -72,27 +65,9 @@ export default function List() {
         totalPurchases: newTotalPurchases,
         purchaseFreq: estimateInDays,
         estimatedNextPurchaseDate: nextPurchaseDate,
-        // estimatedNextPurchaseDate: checked ? null : doc.getDate(doc.purchaseDate) + Number(doc.purchaseFreq),
       });
     }
   }
-
-  // our date ex: May, 4, 2022 at 7:51:23 AM UTC-5 needs to be converted to a number for the calculation above (.getDate()) which will print a number between 1-31
-
-  //const calculateEstimate = (docs) => {
-  //doc.purchase + doc.purchaseDate = estimatedNextPurchase
-  //14 days + May 3, 2022 = May 17, 2022
-  //7 days + May 31, 2022 = June 7, 2022
-  //create another field for database called estimatedNextPurchase and call calculateEstimate with useEffect()
-  //if (docs.purchaseDate) {
-  //const nextPurchaseDate = Number(docs.purchase) + Number(docs.purchaseDate)
-  //} else if (docs.purchaseDate === null){
-  //return true;
-  //keep estimatedNextPurchase the same;  maybe return true or something
-  //} else {
-  //return null;
-  //}
-  //}
 
   useEffect(() => {
     let unsubscribe;
@@ -171,12 +146,7 @@ export default function List() {
                       checked={doc.checked}
                       onChange={() => checkboxChange(doc)}
                     />
-                    {doc.item}, last purchased at{' '}
-                    {JSON.stringify(new Date(doc.purchaseDate.toMillis()))},
-                    next purchase at{' '}
-                    {JSON.stringify(
-                      new Date(doc.estimatedNextPurchaseDate.toMillis()),
-                    )}
+                    {doc.item}
                   </li>
                 );
               })}

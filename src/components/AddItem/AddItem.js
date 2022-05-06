@@ -72,7 +72,7 @@ export default function AddItem() {
             placeholder="item"
             aria-label="item"
             onChange={(e) => setItemName(e.target.value)}
-          ></input>
+          />
           <fieldset>
             <legend>Frequency</legend>
             <div className="radio">

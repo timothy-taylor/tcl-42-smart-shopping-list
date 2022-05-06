@@ -10,7 +10,7 @@ describe('normalizeInput', () => {
     expect(normalizeInput(sanitizedStr)).toEqual(sanitizedStr);
   });
 
-  idt('runs with some unreasonable input', () => {
+  it('runs with some unreasonable input', () => {
     const str = 'some! ?nice... food items';
     expect(normalizeInput(str)).toEqual(sanitizedStr);
   });
