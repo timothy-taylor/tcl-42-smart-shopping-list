@@ -3,6 +3,7 @@ import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
 export const DAY_IN_MILLISEC = 86400000;
 
