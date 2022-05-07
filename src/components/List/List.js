@@ -1,38 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import {
-  collection,
-  doc,
-  onSnapshot,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
 
-export const timeDifference = (timestampInMilli) => {
+export const DAY_IN_MILLISEC = 86400000;
+
+export const isLessThan24HoursOld = (timestampInMilli) => {
   if (!timestampInMilli) return false;
 
-  const dayInMilli = 86400000;
   const date = Date.now();
   const difference = date - timestampInMilli;
-  const comparison = difference < dayInMilli;
+  const comparison = difference < DAY_IN_MILLISEC;
 
   // this will return true when its been less than 24 hours
   // false otherwise
   return comparison;
 };
 
+export const daysSincePurchase = (timestampInMilli, dateCreatedInMilli) => {
+  const workingTimestamp = timestampInMilli || dateCreatedInMilli;
 
-const List = () => {
+  const date = Date.now();
+  const differenceInMilli = date - workingTimestamp;
+  const differenceInDays = differenceInMilli / DAY_IN_MILLISEC;
+
+  return differenceInDays;
+};
+
+export default function List() {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
   const [userSearch, setUserSearch] = useState('');
 
-  async function checkboxChange(checked, id) {
-    await updateDoc(doc(db, token, id), {
-      purchaseDate: checked ? null : serverTimestamp(),
-    });
+  async function checkboxChange(item) {
+    if (item.checked) {
+      //
+      // undo a purchase
+      await updateDoc(doc(db, token, item.id), {
+        purchaseDate: null,
+        estimatedNextPurchaseDate: null,
+      });
+    } else {
+      //
+      // update the purchaseDate, nextPurchaseDate, and purchaseFreq
+      const newTotalPurchases = item.totalPurchases + 1;
+      const estimateInDays = calculateEstimate(
+        item.purchaseFreq,
+        daysSincePurchase(
+          item.purchaseDate?.toMillis(),
+          item.createdAt.toMillis(),
+        ),
+        newTotalPurchases,
+      );
+
+      const now = new Date();
+      const nextPurchaseDate = new Date(
+        now.getTime() + estimateInDays * DAY_IN_MILLISEC,
+      );
+
+      await updateDoc(doc(db, token, item.id), {
+        purchaseDate: now,
+        totalPurchases: newTotalPurchases,
+        purchaseFreq: estimateInDays,
+        estimatedNextPurchaseDate: nextPurchaseDate,
+      });
+    }
   }
 
   useEffect(() => {
@@ -45,7 +78,7 @@ const List = () => {
             const data = doc.data();
             return {
               id: doc.id,
-              checked: timeDifference(data.purchaseDate?.toMillis()),
+              checked: isLessThan24HoursOld(data.purchaseDate?.toMillis()),
               ...data,
             };
           }),
@@ -76,10 +109,15 @@ const List = () => {
               onChange={(e) => setUserSearch(e.target.value)}
             />
           </label>
-          <button onClick={() => setUserSearch('')}>X</button>
+          <button
+            aria-label="Clear filter input"
+            onClick={() => setUserSearch('')}
+          >
+            X
+          </button>
           <ul style={{ listStyle: 'none' }}>
             {docs
-              .filter((doc) => {
+              .filter(({ item }) => {
                 // 1) if search input is blank / empty
                 // item will pass through filter
                 //
@@ -90,7 +128,7 @@ const List = () => {
                 if (userSearch === '') {
                   return true;
                 } else if (
-                  doc.item.toLowerCase().includes(userSearch.toLowerCase())
+                  item.toLowerCase().includes(userSearch.toLowerCase())
                 ) {
                   return true;
                 } else {
@@ -105,7 +143,7 @@ const List = () => {
                       type="checkbox"
                       id={doc.id}
                       checked={doc.checked}
-                      onChange={(e) => checkboxChange(doc.checked, e.target.id)}
+                      onChange={() => checkboxChange(doc)}
                     />
                     {doc.item}
                   </li>
@@ -116,6 +154,4 @@ const List = () => {
       )}
     </>
   );
-};
-
-export default List;
+}

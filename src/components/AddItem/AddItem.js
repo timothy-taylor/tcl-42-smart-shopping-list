@@ -1,60 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../../lib/firebase';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   collection,
   getDocs,
   addDoc,
   serverTimestamp,
 } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
-import { useParams } from 'react-router-dom';
 
-const AddItem = () => {
+export const normalizeInput = (listItem) =>
+  listItem
+    .toLowerCase()
+    .replace(/[^\w\s]|_/g, '')
+    .replace(/\s+/g, ' ');
+
+export default function AddItem() {
+  const { token } = useParams();
   const [itemName, setItemName] = useState('');
   const [purchaseFreq, setPurchaseFreq] = useState('7');
-  const [lastPurchaseDate, setLastPurchaseDate] = useState(null);
   const [error, setError] = useState(null);
 
-  const { token } = useParams();
-
-  const normalizeInput = listItem => {
-    const normalizedInput = listItem.toUpperCase().replace(/[^\w\s]|_/g, "")
-    .replace(/\s+/g, " ");
-    return normalizedInput;
-  };
-
-  const checkForDuplicates = async () => {
+  async function checkForDuplicates() {
     const items = [];
     const querySnapshot = await getDocs(collection(db, token));
+
     querySnapshot.forEach((doc) => {
       items.push(doc.data().item);
     });
-    return items.some(item => normalizeInput(item) === normalizeInput(itemName));
-  };
+
+    return items.some(
+      (item) => normalizeInput(item) === normalizeInput(itemName),
+    );
+  }
 
   async function handleClick(e) {
     e.preventDefault();
-    try {
-     const check = await checkForDuplicates();
-     console.log('dup?', check);
-     if (check) {
+
+    if (await checkForDuplicates()) {
       setError('This item is already on your list!');
       setItemName('');
-     } else {
-      const colRef = collection(db, token);
-      const docRef = await addDoc(colRef, {
-        item: itemName,
-        purchase: purchaseFreq,
-        createdAt: serverTimestamp(),
-        purchaseDate: lastPurchaseDate,
-      });
-      console.log('Document written with ID: ', docRef.id);
-      console.log('Saved state of frequency', purchaseFreq);
-      setItemName('');
-      setPurchaseFreq('7');
-     }
-    } catch (e) {
-      console.error('Error adding document: ', e);
+    } else {
+      try {
+        await addDoc(collection(db, token), {
+          item: itemName,
+          purchaseFreq: parseInt(purchaseFreq),
+          createdAt: serverTimestamp(),
+          purchaseDate: null,
+          estimatedNextPurchaseDate: null,
+          totalPurchases: 0,
+        });
+        setItemName('');
+        setPurchaseFreq('7');
+        setError(null);
+      } catch (e) {
+        setError(`Error adding document: ${e}`);
+      }
     }
   }
 
@@ -71,7 +72,7 @@ const AddItem = () => {
             placeholder="item"
             aria-label="item"
             onChange={(e) => setItemName(e.target.value)}
-          ></input>
+          />
           <fieldset>
             <legend>Frequency</legend>
             <div className="radio">
@@ -119,10 +120,8 @@ const AddItem = () => {
           </fieldset>
           <button type="submit">Add Data</button>
         </form>
-        <div style={{color: 'red'}}>{error}</div>
+        {error && <div style={{ color: 'red' }}>{error}</div>}
       </div>
     </>
   );
-};
-
-export default AddItem;
+}
