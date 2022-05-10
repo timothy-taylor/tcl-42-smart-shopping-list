@@ -1,93 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
-import Navigation from '../Navigation/Navigation';
+import React, { useState } from 'react';
+import { doc, updateDoc } from 'firebase/firestore';
 import { useParams, Link } from 'react-router-dom';
+import { db } from '../../lib/firebase';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import useSnapshot from '../../hooks/useSnapshot';
+import Navigation from '../Navigation/Navigation';
+import { DAY_IN_MILLISEC } from '../../lib/util';
 
-export const DAY_IN_MILLISEC = 86400000;
+export const daysSincePurchase = (datePurchaseInMilli, dateCreatedInMilli) => {
+  const workingTimestamp = datePurchaseInMilli || dateCreatedInMilli;
 
-export const isLessThan24HoursOld = (timestampInMilli) => {
-  if (!timestampInMilli) return false;
-
-  const date = Date.now();
-  const difference = date - timestampInMilli;
-  const comparison = difference < DAY_IN_MILLISEC;
-
-  // this will return true when its been less than 24 hours
-  // false otherwise
-  return comparison;
+  const differenceInMilli = Date.now() - workingTimestamp;
+  return differenceInMilli / DAY_IN_MILLISEC;
 };
 
-export const daysSincePurchase = (timestampInMilli, dateCreatedInMilli) => {
-  const workingTimestamp = timestampInMilli || dateCreatedInMilli;
+function getPurchaseDates(estimateInDays) {
+  const purchaseDate = new Date();
+  const estimatedNextPurchaseDate = new Date(
+    purchaseDate.getTime() + estimateInDays * DAY_IN_MILLISEC,
+  );
 
-  const date = Date.now();
-  const differenceInMilli = date - workingTimestamp;
-  const differenceInDays = differenceInMilli / DAY_IN_MILLISEC;
+  return [purchaseDate, estimatedNextPurchaseDate];
+}
 
-  return differenceInDays;
-};
+function getPurchaseData(item) {
+  const totalPurchases = item.totalPurchases + 1;
+  const purchaseFreq = calculateEstimate(
+    item.purchaseFreq,
+    daysSincePurchase(item.purchaseDate?.toMillis(), item.createdAt.toMillis()),
+    totalPurchases,
+  );
+
+  return [totalPurchases, purchaseFreq];
+}
 
 export default function List() {
   const { token } = useParams();
-  const [docs, setDocs] = useState([]);
+  const { docs } = useSnapshot(token);
   const [userSearch, setUserSearch] = useState('');
+
+  async function undoPurchase(id) {
+    await updateDoc(doc(db, token, id), {
+      purchaseDate: null,
+      estimatedNextPurchaseDate: null,
+    });
+  }
+
+  async function updatePurchase(item) {
+    const [totalPurchases, purchaseFreq] = getPurchaseData(item);
+    const [purchaseDate, estimatedNextPurchaseDate] =
+      getPurchaseDates(purchaseFreq);
+
+    await updateDoc(doc(db, token, item.id), {
+      purchaseDate,
+      totalPurchases,
+      purchaseFreq,
+      estimatedNextPurchaseDate,
+    });
+  }
 
   async function checkboxChange(item) {
     if (item.checked) {
-      //
-      // undo a purchase
-      await updateDoc(doc(db, token, item.id), {
-        purchaseDate: null,
-        estimatedNextPurchaseDate: null,
-      });
+      undoPurchase(item.id);
     } else {
-      //
-      // update the purchaseDate, nextPurchaseDate, and purchaseFreq
-      const newTotalPurchases = item.totalPurchases + 1;
-      const estimateInDays = calculateEstimate(
-        item.purchaseFreq,
-        daysSincePurchase(
-          item.purchaseDate?.toMillis(),
-          item.createdAt.toMillis(),
-        ),
-        newTotalPurchases,
-      );
-
-      const now = new Date();
-      const nextPurchaseDate = new Date(
-        now.getTime() + estimateInDays * DAY_IN_MILLISEC,
-      );
-
-      await updateDoc(doc(db, token, item.id), {
-        purchaseDate: now,
-        totalPurchases: newTotalPurchases,
-        purchaseFreq: estimateInDays,
-        estimatedNextPurchaseDate: nextPurchaseDate,
-      });
+      updatePurchase(item);
     }
   }
-
-  useEffect(() => {
-    let unsubscribe;
-
-    if (token)
-      unsubscribe = onSnapshot(collection(db, token), (snapshot) => {
-        setDocs(
-          snapshot.docs.map((doc) => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              checked: isLessThan24HoursOld(data.purchaseDate?.toMillis()),
-              ...data,
-            };
-          }),
-        );
-      });
-
-    return unsubscribe;
-  }, [token]);
 
   return (
     <>
