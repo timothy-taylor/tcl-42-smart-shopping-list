@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { DAY_IN_MILLISEC } from '../lib/util';
 
@@ -15,9 +15,10 @@ export default function useSnapshot(token) {
 
   useEffect(() => {
     let unsubscribe;
-
-    if (token)
-      unsubscribe = onSnapshot(collection(db, token), (snapshot) => {
+    
+    if (token){
+    const q = query(collection(db, token), orderBy("item"));
+      unsubscribe = onSnapshot(q, (snapshot) => {
         setDocs(
           snapshot.docs.map((doc) => {
             const data = doc.data();
@@ -29,9 +30,10 @@ export default function useSnapshot(token) {
           }),
         );
       });
+    }
 
     return unsubscribe;
   }, [token]);
-
+  
   return { docs };
 }

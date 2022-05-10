@@ -66,6 +66,57 @@ export default function List() {
       updatePurchase(item);
     }
   }
+  function isInactive(purchaseDate, estimatedNextPurchaseDate) {
+    //the current date from when it was purchased. Checked if thats 2X's more of the estimatedNPD
+    const date = new Date(purchaseDate);
+    const timeElapsed = date.getTime() - Date.now();
+    const estiDate = new Date(estimatedNextPurchaseDate);
+    const comparison = timeElapsed * 2 > estiDate.getTime();
+
+    return comparison;
+  }
+
+  function styleCheckbox(
+    purchaseFreq,
+    totalPurchases,
+    purchaseDate,
+    estimatedNextPurchaseDate,
+  ) {
+    if (
+      totalPurchases < 2 ||
+      isInactive(purchaseDate, estimatedNextPurchaseDate)
+    ) {
+      return 'black';
+    }
+    if (purchaseFreq <= 7) {
+      return 'green';
+    }
+    if (purchaseFreq <= 14) {
+      return 'orange';
+    }
+    return 'red';
+  }
+
+  function accessibilityLabel(
+    purchaseFreq,
+    totalPurchases,
+    purchaseDate,
+    estimatedNextPurchaseDate,
+  ) {
+    if (
+      totalPurchases < 2 ||
+      isInactive(purchaseDate, estimatedNextPurchaseDate)
+    ) {
+      return 'not purchase';
+    }
+    if (purchaseFreq <= 7) {
+      return 'purchase in less than 7 days';
+    }
+    if (purchaseFreq <= 14) {
+      return 'purchase in less than 14 days';
+    }
+    return 'purchase in 30 days';
+  }
 
   return (
     <>
@@ -114,6 +165,15 @@ export default function List() {
                   return false;
                 }
               })
+              .sort((a, b) => {
+                if (a.purchaseFreq < b.purchaseFreq) {
+                  return -1;
+                }
+                if (a.purchaseFreq > b.purchaseFreq) {
+                  return 1;
+                }
+                return 0;
+              })
               .map((doc) => {
                 return (
                   <li key={doc.id}>
@@ -124,7 +184,24 @@ export default function List() {
                       checked={doc.checked}
                       onChange={() => checkboxChange(doc)}
                     />
-                    {doc.item}
+                    <span
+                      aria-label={accessibilityLabel(
+                        doc.purchaseFreq,
+                        doc.totalPurchases,
+                        doc.purchaseDate,
+                        doc.estimatedNextPurchaseDate
+                      )}
+                      style={{
+                        color: styleCheckbox(
+                          doc.purchaseFreq,
+                          doc.totalPurchases,
+                          doc.purchaseDate,
+                          doc.estimatedNextPurchaseDate
+                        ),
+                      }}
+                    >
+                      {doc.item}
+                    </span>
                   </li>
                 );
               })}
