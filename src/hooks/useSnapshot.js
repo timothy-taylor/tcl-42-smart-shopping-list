@@ -6,8 +6,8 @@ import { DAY_IN_MILLISEC } from '../lib/util';
 export const isLessThan24HoursOld = (datePurchaseInMilli) => {
   if (!datePurchaseInMilli) return false;
 
-  const difference = Date.now() - datePurchaseInMilli;
-  return difference < DAY_IN_MILLISEC;
+  const timeElapsed = Date.now() - datePurchaseInMilli;
+  return timeElapsed < DAY_IN_MILLISEC;
 };
 
 export default function useSnapshot(token) {

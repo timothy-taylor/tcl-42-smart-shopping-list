@@ -1,19 +1,19 @@
-import { db } from '../../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { db } from '../../lib/firebase';
 import { DAY_IN_MILLISEC } from '../../lib/util';
 
 const SOON = 7;
 const KIND_OF_SOON = 14;
 
 function isInactive(totalPurchases, purchaseDate, estimatedNextPurchaseDate) {
-  if (totalPurchases < 2) return true;
-  const date = new Date(purchaseDate);
-  const timeElapsed = date.getTime() - Date.now();
-  const estiDate = new Date(estimatedNextPurchaseDate);
-  const comparison = timeElapsed * 2 > estiDate.getTime();
+  if (totalPurchases < 1) return true;
 
-  return comparison;
+  const timeElapsed = new Date(purchaseDate).getTime() - Date.now();
+  const estiDate = new Date(estimatedNextPurchaseDate);
+  const isElapsed = timeElapsed * 2 > estiDate.getTime();
+
+  return isElapsed;;
 }
 
 function styleCheckbox(item) {
@@ -22,6 +22,7 @@ function styleCheckbox(item) {
     item.purchaseDate,
     item.estimatedNextPurchaseDate,
   );
+
   if (inactive) return 'black';
   if (item.purchaseFreq <= SOON) return 'green';
   if (item.purchaseFreq <= KIND_OF_SOON) return 'orange';
@@ -34,13 +35,14 @@ function accessibilityLabel(item) {
     item.purchaseDate,
     item.estimatedNextPurchaseDate,
   );
-  if (inactive) return 'not purchase';
+
+  if (inactive) return 'item has not been purchased recently';
   if (item.purchaseFreq <= SOON) return 'purchase in less than 7 days';
   if (item.purchaseFreq <= KIND_OF_SOON) return 'purchase in less than 14 days';
   return 'purchase in 30 days';
 }
 
-export const daysSincePurchase = (datePurchaseInMilli, dateCreatedInMilli) => {
+export function daysSincePurchase(datePurchaseInMilli, dateCreatedInMilli) {
   const workingTimestamp = datePurchaseInMilli || dateCreatedInMilli;
 
   const differenceInMilli = Date.now() - workingTimestamp;
