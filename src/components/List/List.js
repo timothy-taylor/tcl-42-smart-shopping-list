@@ -59,15 +59,16 @@ export default function List() {
     });
   }
 
-  async function checkboxChange(item) {
+  function checkboxChange(item) {
     if (item.checked) {
       undoPurchase(item.id);
     } else {
       updatePurchase(item);
     }
   }
-  function isInactive(purchaseDate, estimatedNextPurchaseDate) {
-    //the current date from when it was purchased. Checked if thats 2X's more of the estimatedNPD
+
+  function isInactive(totalPurchases, purchaseDate, estimatedNextPurchaseDate) {
+    if (totalPurchases < 2) return true;
     const date = new Date(purchaseDate);
     const timeElapsed = date.getTime() - Date.now();
     const estiDate = new Date(estimatedNextPurchaseDate);
@@ -76,45 +77,27 @@ export default function List() {
     return comparison;
   }
 
-  function styleCheckbox(
-    purchaseFreq,
-    totalPurchases,
-    purchaseDate,
-    estimatedNextPurchaseDate,
-  ) {
-    if (
-      totalPurchases < 2 ||
-      isInactive(purchaseDate, estimatedNextPurchaseDate)
-    ) {
-      return 'black';
-    }
-    if (purchaseFreq <= 7) {
-      return 'green';
-    }
-    if (purchaseFreq <= 14) {
-      return 'orange';
-    }
+  function styleCheckbox(item) {
+    const inactive = isInactive(
+      item.totalPurchases,
+      item.purchaseDate,
+      item.estimatedNextPurchaseDate,
+    );
+    if (inactive) return 'black';
+    if (item.purchaseFreq <= 7) return 'green';
+    if (item.purchaseFreq <= 14) return 'orange';
     return 'red';
   }
 
-  function accessibilityLabel(
-    purchaseFreq,
-    totalPurchases,
-    purchaseDate,
-    estimatedNextPurchaseDate,
-  ) {
-    if (
-      totalPurchases < 2 ||
-      isInactive(purchaseDate, estimatedNextPurchaseDate)
-    ) {
-      return 'not purchase';
-    }
-    if (purchaseFreq <= 7) {
-      return 'purchase in less than 7 days';
-    }
-    if (purchaseFreq <= 14) {
-      return 'purchase in less than 14 days';
-    }
+  function accessibilityLabel(item) {
+    const inactive = isInactive(
+      item.totalPurchases,
+      item.purchaseDate,
+      item.estimatedNextPurchaseDate,
+    );
+    if (inactive) return 'not purchase';
+    if (item.purchaseFreq <= 7) return 'purchase in less than 7 days';
+    if (item.purchaseFreq <= 14) return 'purchase in less than 14 days';
     return 'purchase in 30 days';
   }
 
@@ -166,12 +149,8 @@ export default function List() {
                 }
               })
               .sort((a, b) => {
-                if (a.purchaseFreq < b.purchaseFreq) {
-                  return -1;
-                }
-                if (a.purchaseFreq > b.purchaseFreq) {
-                  return 1;
-                }
+                if (a.purchaseFreq < b.purchaseFreq) return -1;
+                if (a.purchaseFreq > b.purchaseFreq) return 1;
                 return 0;
               })
               .map((doc) => {
@@ -185,19 +164,10 @@ export default function List() {
                       onChange={() => checkboxChange(doc)}
                     />
                     <span
-                      aria-label={accessibilityLabel(
-                        doc.purchaseFreq,
-                        doc.totalPurchases,
-                        doc.purchaseDate,
-                        doc.estimatedNextPurchaseDate
-                      )}
+                      key={`item-${doc.id}`}
+                      aria-label={accessibilityLabel(doc)}
                       style={{
-                        color: styleCheckbox(
-                          doc.purchaseFreq,
-                          doc.totalPurchases,
-                          doc.purchaseDate,
-                          doc.estimatedNextPurchaseDate
-                        ),
+                        color: styleCheckbox(doc),
                       }}
                     >
                       {doc.item}
