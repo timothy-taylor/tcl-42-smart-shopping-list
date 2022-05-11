@@ -1,35 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import List, { isLessThan24HoursOld, daysSincePurchase, DAY_IN_MILLISEC } from './List';
+import List from './List';
 import { BrowserRouter } from 'react-router-dom';
-import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
-
-describe('calculateEstimate', () => {
-  it('runs calculateEstimate with less than two purchases', () => {
-    // parameters:
-    // previousEstimate(number)
-    // daysSinceLastPurchase(number)
-    // totalPurchases(number)
-    // return: a number in days
-    const returnValue = calculateEstimate(7, 5, 1);
-    expect(returnValue).toEqual(5);
-  });
-});
-
-describe('daysSincePurchase', () => {
-  it('runs with valid input', () => {
-    const numDays = 3;
-    const dateSinceLastPurchased = Date.now() - DAY_IN_MILLISEC * numDays;
-    const dateCreated = Date.now() - DAY_IN_MILLISEC * 7;
-    expect(daysSincePurchase(dateSinceLastPurchased,dateCreated)).toEqual(numDays);
-  });
-
-  it('runs with undefined input', () => {
-    const numDays = 5;
-    const dateCreated = Date.now() - DAY_IN_MILLISEC * numDays;
-    expect(daysSincePurchase(undefined,dateCreated)).toEqual(numDays);
-  });
-});
+import { isLessThan24HoursOld } from '../../hooks/useSnapshot';
 
 describe('isLessThan24HoursOld', () => {
   const oneHourInMilliSec = 3600000;

@@ -17,7 +17,7 @@ export default function useSnapshot(token) {
     let unsubscribe;
     
     if (token){
-    const q = query(collection(db, token), orderBy("item"));
+      const q = query(collection(db, token), orderBy("item"));
       unsubscribe = onSnapshot(q, (snapshot) => {
         setDocs(
           snapshot.docs.map((doc) => {
