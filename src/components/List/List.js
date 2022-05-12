@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import Navigation from '../Navigation/Navigation';
 import { useParams, Link } from 'react-router-dom';
@@ -33,6 +39,12 @@ export default function List() {
   const { token } = useParams();
   const [docs, setDocs] = useState([]);
   const [userSearch, setUserSearch] = useState('');
+
+  async function deleteItem(id) {
+    if (window.confirm("Are you sure you want to delete item?")) {
+      await deleteDoc(doc(db, token, id));
+    }
+  }
 
   async function checkboxChange(item) {
     if (item.checked) {
@@ -147,6 +159,12 @@ export default function List() {
                       onChange={() => checkboxChange(doc)}
                     />
                     {doc.item}
+                    <button
+                      key={`delete-${doc.id}`}
+                      onClick={() => deleteItem(doc.id)}
+                    >
+                      Delete
+                    </button>
                   </li>
                 );
               })}
