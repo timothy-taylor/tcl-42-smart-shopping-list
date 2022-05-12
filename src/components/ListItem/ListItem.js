@@ -4,19 +4,19 @@ import { db } from '../../lib/firebase';
 import { DAY_IN_MILLISEC } from '../../lib/util';
 
 const SOON = 7;
-const KIND_OF_SOON = 14;
+const KINDA_SOON = 14;
 
 function isInactive(totalPurchases, purchaseDate, estimatedNextPurchaseDate) {
-  if (totalPurchases < 1) return true;
+  if (totalPurchases < 2) return true;
 
   const timeElapsed = new Date(purchaseDate).getTime() - Date.now();
   const estiDate = new Date(estimatedNextPurchaseDate);
   const isElapsed = timeElapsed * 2 > estiDate.getTime();
 
-  return isElapsed;;
+  return isElapsed;
 }
 
-function styleCheckbox(item) {
+function itemStyle(item) {
   const inactive = isInactive(
     item.totalPurchases,
     item.purchaseDate,
@@ -25,7 +25,7 @@ function styleCheckbox(item) {
 
   if (inactive) return 'black';
   if (item.purchaseFreq <= SOON) return 'green';
-  if (item.purchaseFreq <= KIND_OF_SOON) return 'orange';
+  if (item.purchaseFreq <= KINDA_SOON) return 'orange';
   return 'red';
 }
 
@@ -38,7 +38,7 @@ function accessibilityLabel(item) {
 
   if (inactive) return 'item has not been purchased recently';
   if (item.purchaseFreq <= SOON) return 'purchase in less than 7 days';
-  if (item.purchaseFreq <= KIND_OF_SOON) return 'purchase in less than 14 days';
+  if (item.purchaseFreq <= KINDA_SOON) return 'purchase in less than 14 days';
   return 'purchase in 30 days';
 }
 
@@ -47,15 +47,6 @@ export function daysSincePurchase(datePurchaseInMilli, dateCreatedInMilli) {
 
   const differenceInMilli = Date.now() - workingTimestamp;
   return differenceInMilli / DAY_IN_MILLISEC;
-};
-
-function getPurchaseDates(estimateInDays) {
-  const purchaseDate = new Date();
-  const estimatedNextPurchaseDate = new Date(
-    purchaseDate.getTime() + estimateInDays * DAY_IN_MILLISEC,
-  );
-
-  return [purchaseDate, estimatedNextPurchaseDate];
 }
 
 function getPurchaseData(item) {
@@ -69,8 +60,17 @@ function getPurchaseData(item) {
   return [totalPurchases, purchaseFreq];
 }
 
-export default function ListItem({ commodity, token }) {
-  async function undoPurchase(id) {
+function getPurchaseDates(estimateInDays) {
+  const purchaseDate = new Date();
+  const estimatedNextPurchaseDate = new Date(
+    purchaseDate.getTime() + estimateInDays * DAY_IN_MILLISEC,
+  );
+
+  return [purchaseDate, estimatedNextPurchaseDate];
+}
+
+export default function ListItem({ data, token }) {
+  async function undoPurchase({ id }) {
     await updateDoc(doc(db, token, id), {
       purchaseDate: null,
       estimatedNextPurchaseDate: null,
@@ -91,25 +91,21 @@ export default function ListItem({ commodity, token }) {
   }
 
   return (
-    <li key={commodity.id}>
+    <li key={data.id}>
       <input
-        key={`checkbox-${commodity.id}`}
+        key={`checkbox-${data.id}`}
         type="checkbox"
-        checked={commodity.checked}
+        checked={data.checked}
         onChange={() =>
-          commodity.checked
-            ? undoPurchase(commodity.id)
-            : updatePurchase(commodity)
+          data.checked ? undoPurchase(data) : updatePurchase(data)
         }
       />
       <span
-        key={`item-${commodity.id}`}
-        aria-label={accessibilityLabel(commodity)}
-        style={{
-          color: styleCheckbox(commodity),
-        }}
+        key={`item-${data.id}`}
+        aria-label={accessibilityLabel(data)}
+        style={{ color: itemStyle(data) }}
       >
-        {commodity.item}
+        {data.item}
       </span>
     </li>
   );
