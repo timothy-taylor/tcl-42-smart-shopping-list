@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+import Navigation from '../Navigation/Navigation';
+
 import { useParams, Link } from 'react-router-dom';
 import { db } from '../../lib/firebase';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
@@ -172,6 +181,7 @@ export default function List() {
                     >
                       {doc.item}
                     </span>
+
                   </li>
                 );
               })}
