@@ -45,8 +45,8 @@ function accessibilityLabel(item) {
 export function daysSincePurchase(datePurchaseInMilli, dateCreatedInMilli) {
   const workingTimestamp = datePurchaseInMilli || dateCreatedInMilli;
 
-  const differenceInMilli = Date.now() - workingTimestamp;
-  return differenceInMilli / DAY_IN_MILLISEC;
+  const millisecSincePurchase = Date.now() - workingTimestamp;
+  return millisecSincePurchase / DAY_IN_MILLISEC;
 }
 
 function getPurchaseData(item) {
@@ -91,9 +91,8 @@ export default function ListItem({ data, token }) {
   }
 
   return (
-    <li key={data.id}>
+    <li>
       <input
-        key={`checkbox-${data.id}`}
         type="checkbox"
         checked={data.checked}
         onChange={() =>
@@ -101,7 +100,6 @@ export default function ListItem({ data, token }) {
         }
       />
       <span
-        key={`item-${data.id}`}
         aria-label={accessibilityLabel(data)}
         style={{ color: itemStyle(data) }}
       >

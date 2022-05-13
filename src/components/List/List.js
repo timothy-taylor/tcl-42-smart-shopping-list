@@ -39,25 +39,29 @@ export default function List() {
           </button>
           <ul style={{ listStyle: 'none' }}>
             {docs
-              .filter(
-                ({ item }) =>
-                  // 1) if search input is blank / empty
-                  // item will pass through filter
-                  //
-                  // 2) if search string is part of item name
-                  // item will pass through filter
-                  //
-                  // 3) otherwise item will be filtered out
-                  userSearch === '' ||
-                  normalize(item).includes(normalize(userSearch)),
-              )
+              .filter(({ item }) => {
+                // 1) if search input is blank / empty
+                // item will pass through filter
+                //
+                // 2) if search string is part of item name
+                // item will pass through filter
+                //
+                // 3) otherwise item will be filtered out
+                if (userSearch === '') {
+                  return true;
+                } else if (normalize(item).includes(normalize(userSearch))) {
+                  return true;
+                } else {
+                  return false;
+                }
+              })
               .sort((a, b) => {
                 if (a.purchaseFreq < b.purchaseFreq) return -1;
                 if (a.purchaseFreq > b.purchaseFreq) return 1;
                 return 0;
               })
               .map((doc) => (
-                <ListItem data={doc} token={token} />
+                <ListItem key={doc.id} data={doc} token={token} />
               ))}
           </ul>
         </>
