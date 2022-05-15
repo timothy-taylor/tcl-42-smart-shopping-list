@@ -1,4 +1,4 @@
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 import { db } from '../../lib/firebase';
 import { DAY_IN_MILLISEC } from '../../lib/util';
@@ -90,6 +90,12 @@ export default function ListItem({ data, token }) {
     });
   }
 
+  async function deleteItem(id) {
+    if (window.confirm('Are you sure you want to delete item?')) {
+      await deleteDoc(doc(db, token, id));
+    }
+  }
+
   return (
     <li>
       <input
@@ -105,6 +111,9 @@ export default function ListItem({ data, token }) {
       >
         {data.item}
       </span>
+      <button onClick={() => deleteItem(data.id)}>
+        Delete
+      </button>
     </li>
   );
 }

@@ -16,7 +16,7 @@ export default function AddItem() {
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [error, setError] = useState(null);
 
-  async function anyDuplicates() {
+  async function hasDuplicates() {
     const items = [];
     const querySnapshot = await getDocs(collection(db, token));
 
@@ -30,7 +30,7 @@ export default function AddItem() {
   async function handleClick(e) {
     e.preventDefault();
 
-    if (await anyDuplicates()) {
+    if (await hasDuplicates()) {
       setError('This item is already on your list!');
       setItemName('');
     } else {

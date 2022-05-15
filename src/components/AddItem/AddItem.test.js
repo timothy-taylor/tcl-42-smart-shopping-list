@@ -1,23 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AddItem, { normalizeInput } from './AddItem';
+import AddItem from './AddItem';
 import { BrowserRouter } from 'react-router-dom';
+import { normalize } from '../../lib/util'
 
-describe('normalizeInput', () => {
+describe('normalize', () => {
   const sanitizedStr = 'some nice food items';
 
   it('runs with a reasonable input', () => {
-    expect(normalizeInput(sanitizedStr)).toEqual(sanitizedStr);
+    expect(normalize(sanitizedStr)).toEqual(sanitizedStr);
   });
 
   it('runs with some unreasonable input', () => {
     const str = 'some! ?nice... food items';
-    expect(normalizeInput(str)).toEqual(sanitizedStr);
+    expect(normalize(str)).toEqual(sanitizedStr);
   });
 
   it('runs with a really unreasonable input', () => {
     const str = '!!!some n@#$^ic$%#@#$e fo()od ?><,./items...';
-    expect(normalizeInput(str)).toEqual(sanitizedStr);
+    expect(normalize(str)).toEqual(sanitizedStr);
   });
 });
 

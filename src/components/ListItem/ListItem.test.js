@@ -37,6 +37,6 @@ describe('daysSincePurchase', () => {
 it('renders without crashing', () => {
   const item = { item: 'water', checked: true };
   const div = document.createElement('div');
-  ReactDOM.render(<ListItem commodity={item} token={'random string'} />, div);
+  ReactDOM.render(<ListItem data={item} token={'random string'} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
