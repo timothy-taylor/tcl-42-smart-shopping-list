@@ -7,13 +7,8 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { normalize } from '../../lib/util';
 import Navigation from '../Navigation/Navigation';
-
-export const normalizeInput = (listItem) =>
-  listItem
-    .toLowerCase()
-    .replace(/[^\w\s]|_/g, '')
-    .replace(/\s+/g, ' ');
 
 export default function AddItem() {
   const { token } = useParams();
@@ -21,7 +16,7 @@ export default function AddItem() {
   const [purchaseFreq, setPurchaseFreq] = useState('7');
   const [error, setError] = useState(null);
 
-  async function checkForDuplicates() {
+  async function hasDuplicates() {
     const items = [];
     const querySnapshot = await getDocs(collection(db, token));
 
@@ -29,15 +24,13 @@ export default function AddItem() {
       items.push(doc.data().item);
     });
 
-    return items.some(
-      (item) => normalizeInput(item) === normalizeInput(itemName),
-    );
+    return items.some((item) => normalize(item) === normalize(itemName));
   }
 
   async function handleClick(e) {
     e.preventDefault();
 
-    if (await checkForDuplicates()) {
+    if (await hasDuplicates()) {
       setError('This item is already on your list!');
       setItemName('');
     } else {

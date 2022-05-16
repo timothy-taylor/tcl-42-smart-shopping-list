@@ -6,8 +6,8 @@ import { DAY_IN_MILLISEC } from '../lib/util';
 export const isLessThan24HoursOld = (datePurchaseInMilli) => {
   if (!datePurchaseInMilli) return false;
 
-  const difference = Date.now() - datePurchaseInMilli;
-  return difference < DAY_IN_MILLISEC;
+  const timeElapsed = Date.now() - datePurchaseInMilli;
+  return timeElapsed < DAY_IN_MILLISEC;
 };
 
 export default function useSnapshot(token) {
@@ -17,7 +17,7 @@ export default function useSnapshot(token) {
     let unsubscribe;
     
     if (token){
-    const q = query(collection(db, token), orderBy("item"));
+      const q = query(collection(db, token), orderBy("item"));
       unsubscribe = onSnapshot(q, (snapshot) => {
         setDocs(
           snapshot.docs.map((doc) => {
