@@ -1,14 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { getToken, words } from '@the-collab-lab/shopping-list-utils';
 import { collection, query, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { parseToken } from '../../lib/util';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
-const Welcome = () => {
-  const [token, setToken] = React.useState(localStorage.getItem('user-token'));
-  const [userInput, setUserInput] = React.useState('');
-  const [error, setError] = React.useState(null);
+export default function Welcome() {
+  const { token, setToken } = useLocalStorage();
+  const [userInput, setUserInput] = useState('');
+  const [error, setError] = useState(null);
 
   const handleClick = () => {
     const parsedToken = parseToken(getToken(words));
@@ -17,6 +18,7 @@ const Welcome = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const parsedUserInput = parseToken(userInput);
     const q = query(collection(db, parsedUserInput), limit(1));
     const querySnapshot = await getDocs(q);
@@ -28,10 +30,6 @@ const Welcome = () => {
     }
   };
 
-  React.useEffect(() => {
-    localStorage.setItem('user-token', token);
-  }, [token]);
-
   return (
     <>
       {token ? (
@@ -39,7 +37,7 @@ const Welcome = () => {
       ) : (
         <>
           <h1>Welcome to your smart shopping list</h1>
-          <button onClick={(e) => handleClick(e)}>Create new list</button>
+          <button onClick={handleClick}>Create new list</button>
           <div>- or -</div>
           <p>Join an existing shopping list by entering a three word token.</p>
           <form onSubmit={(e) => handleSubmit(e)}>
@@ -66,6 +64,4 @@ const Welcome = () => {
       )}
     </>
   );
-};
-
-export default Welcome;
+}
