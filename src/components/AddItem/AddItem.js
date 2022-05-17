@@ -8,7 +8,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { normalize } from '../../lib/util';
-import Navigation from '../Navigation/Navigation';
+import Layout from '../Layout/Layout';
 
 export default function AddItem() {
   const { token } = useParams();
@@ -53,68 +53,64 @@ export default function AddItem() {
   }
 
   return (
-    <>
-      <Navigation token={token} />
-      <h1>Smart Shopping List</h1>
-      <div>
-        <form onSubmit={(e) => handleClick(e)}>
-          <input
-            type="text"
-            required
-            value={itemName}
-            placeholder="item"
-            aria-label="item"
-            onChange={(e) => setItemName(e.target.value)}
-          />
-          <fieldset>
-            <legend>Frequency</legend>
-            <div className="radio">
-              <label>
-                <input
-                  name="frequency"
-                  type="radio"
-                  value="7"
-                  checked={purchaseFreq === '7'}
-                  onChange={(e) => {
-                    setPurchaseFreq(e.target.value);
-                  }}
-                />
-                Soon
-              </label>
-            </div>
-            <div className="radio">
-              <label>
-                <input
-                  name="frequency"
-                  type="radio"
-                  value="14"
-                  checked={purchaseFreq === '14'}
-                  onChange={(e) => {
-                    setPurchaseFreq(e.target.value);
-                  }}
-                />
-                Kinda soon
-              </label>
-            </div>
-            <div className="radio">
-              <label>
-                <input
-                  name="frequency"
-                  type="radio"
-                  value="30"
-                  checked={purchaseFreq === '30'}
-                  onChange={(e) => {
-                    setPurchaseFreq(e.target.value);
-                  }}
-                />
-                Not soon
-              </label>
-            </div>
-          </fieldset>
-          <button type="submit">Add Data</button>
-        </form>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-      </div>
-    </>
+    <Layout token={token}>
+      <form onSubmit={(e) => handleClick(e)}>
+        <input
+          type="text"
+          required
+          value={itemName}
+          placeholder="item"
+          aria-label="item"
+          onChange={(e) => setItemName(e.target.value)}
+        />
+        <fieldset>
+          <legend>Frequency</legend>
+          <div className="radio">
+            <label>
+              <input
+                name="frequency"
+                type="radio"
+                value="7"
+                checked={purchaseFreq === '7'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
+              Soon
+            </label>
+          </div>
+          <div className="radio">
+            <label>
+              <input
+                name="frequency"
+                type="radio"
+                value="14"
+                checked={purchaseFreq === '14'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
+              Kinda soon
+            </label>
+          </div>
+          <div className="radio">
+            <label>
+              <input
+                name="frequency"
+                type="radio"
+                value="30"
+                checked={purchaseFreq === '30'}
+                onChange={(e) => {
+                  setPurchaseFreq(e.target.value);
+                }}
+              />
+              Not soon
+            </label>
+          </div>
+        </fieldset>
+        <button type="submit">Add Data</button>
+      </form>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+    </Layout>
   );
 }
