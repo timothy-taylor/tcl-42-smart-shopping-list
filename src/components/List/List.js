@@ -14,7 +14,7 @@ export default function List() {
     <Layout token={token}>
       {docs.length === 0 ? (
         <>
-          <h2>Your shopping list is currently empty</h2>
+          <h2 className="text-orange-500">Your shopping list is currently empty</h2>
           <Link to={`/addItem/${token}`}>
             <button>Add Item</button>
           </Link>
