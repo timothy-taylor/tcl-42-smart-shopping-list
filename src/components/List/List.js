@@ -12,7 +12,6 @@ export default function List() {
 
   return (
     <Layout token={token}>
-      
       {docs.length === 0 ? (
         <>
           <h2>Your shopping list is currently empty</h2>

@@ -10,6 +10,23 @@ import { db } from '../../lib/firebase';
 import { normalize } from '../../lib/util';
 import Layout from '../Layout/Layout';
 
+function Checkbox({text, value, purchaseFreq, setPurchaseFreq}) {
+  return (
+    <label>
+      <input
+        name="frequency"
+        type="radio"
+        value={value}
+        checked={purchaseFreq === value}
+        onChange={(e) => {
+          setPurchaseFreq(e.target.value);
+        }}
+      />
+      {text}
+    </label>
+  );
+}
+
 export default function AddItem() {
   const { token } = useParams();
   const [itemName, setItemName] = useState('');
@@ -65,48 +82,9 @@ export default function AddItem() {
         />
         <fieldset>
           <legend>Frequency</legend>
-          <div className="radio">
-            <label>
-              <input
-                name="frequency"
-                type="radio"
-                value="7"
-                checked={purchaseFreq === '7'}
-                onChange={(e) => {
-                  setPurchaseFreq(e.target.value);
-                }}
-              />
-              Soon
-            </label>
-          </div>
-          <div className="radio">
-            <label>
-              <input
-                name="frequency"
-                type="radio"
-                value="14"
-                checked={purchaseFreq === '14'}
-                onChange={(e) => {
-                  setPurchaseFreq(e.target.value);
-                }}
-              />
-              Kinda soon
-            </label>
-          </div>
-          <div className="radio">
-            <label>
-              <input
-                name="frequency"
-                type="radio"
-                value="30"
-                checked={purchaseFreq === '30'}
-                onChange={(e) => {
-                  setPurchaseFreq(e.target.value);
-                }}
-              />
-              Not soon
-            </label>
-          </div>
+          <Checkbox text="Soon" value="7" {...{purchaseFreq, setPurchaseFreq}} />
+          <Checkbox text="Kinda soon" value="14" {...{purchaseFreq, setPurchaseFreq}} />
+          <Checkbox text="Not soon" value="30" {...{purchaseFreq, setPurchaseFreq}} />
         </fieldset>
         <button type="submit">Add Data</button>
       </form>
