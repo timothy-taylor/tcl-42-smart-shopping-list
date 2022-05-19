@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { normalize } from '../../lib/util';
 import useSnapshot from '../../hooks/useSnapshot';
-import Navigation from '../Navigation/Navigation';
 import ListItem from '../ListItem/ListItem';
+import Layout from '../Layout/Layout';
 
 export default function List() {
   const { token } = useParams();
@@ -11,12 +11,10 @@ export default function List() {
   const [userSearch, setUserSearch] = useState('');
 
   return (
-    <>
-      <h1>Smart Shopping List</h1>
-      <Navigation token={token} />
+    <Layout token={token}>
       {docs.length === 0 ? (
         <>
-          <h2>Your shopping list is currently empty</h2>
+          <h2 className="text-blue-700">Your shopping list is currently empty</h2>
           <Link to={`/addItem/${token}`}>
             <button>Add Item</button>
           </Link>
@@ -66,6 +64,6 @@ export default function List() {
           </ul>
         </>
       )}
-    </>
+    </Layout>
   );
 }
