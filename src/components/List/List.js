@@ -5,6 +5,26 @@ import useSnapshot from '../../hooks/useSnapshot';
 import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
 
+const FilterInput = ({ userSearch, setUserSearch }) => (
+  <div className="flex justify-center items-center">
+    <input
+      className="border-secondary focus:border-primary"
+      type="text"
+      placeholder="Filter items"
+      aria-label="Filter items"
+      value={userSearch}
+      onChange={(e) => setUserSearch(e.target.value)}
+    />
+    <button
+      className="p-1 text-secondary"
+      aria-label="Clear filter input"
+      onClick={() => setUserSearch('')}
+    >
+      X
+    </button>
+  </div>
+);
+
 export default function List() {
   const { token } = useParams();
   const { docs } = useSnapshot(token);
@@ -14,28 +34,19 @@ export default function List() {
     <Layout token={token}>
       {docs.length === 0 ? (
         <>
-          <h2 className="text-blue-700">Your shopping list is currently empty</h2>
+          <h2 className="font-serif text-xl">
+            Your shopping list is currently empty
+          </h2>
           <Link to={`/addItem/${token}`}>
-            <button>Add Item</button>
+            <button className="border-2 p-2 border-secondary text-secondary">
+              Add Item
+            </button>
           </Link>
         </>
       ) : (
         <>
-          <label>
-            Filter items
-            <input
-              type="text"
-              value={userSearch}
-              onChange={(e) => setUserSearch(e.target.value)}
-            />
-          </label>
-          <button
-            aria-label="Clear filter input"
-            onClick={() => setUserSearch('')}
-          >
-            X
-          </button>
-          <ul style={{ listStyle: 'none' }}>
+          <FilterInput {...{ userSearch, setUserSearch }} />
+          <ul className="m-8">
             {docs
               .filter(({ item }) => {
                 // 1) if search input is blank / empty

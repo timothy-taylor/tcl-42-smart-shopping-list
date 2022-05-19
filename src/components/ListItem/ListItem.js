@@ -24,9 +24,9 @@ function itemStyle(item) {
   );
 
   if (inactive) return 'black';
-  if (item.purchaseFreq <= SOON) return 'green';
-  if (item.purchaseFreq <= KINDA_SOON) return 'orange';
-  return 'red';
+  if (item.purchaseFreq <= SOON) return 'soon';
+  if (item.purchaseFreq <= KINDA_SOON) return 'kinda-soon';
+  return 'not-soon';
 }
 
 function accessibilityLabel(item) {
@@ -97,8 +97,9 @@ export default function ListItem({ data, token }) {
   }
 
   return (
-    <li>
+    <li className={`p-2 m-1 border-l-2 border-l-${itemStyle(data)}`}>
       <input
+        className="text-primary"
         type="checkbox"
         checked={data.checked}
         onChange={() =>
@@ -106,12 +107,15 @@ export default function ListItem({ data, token }) {
         }
       />
       <span
+        className="p-2 font-serif text-lg"
         aria-label={accessibilityLabel(data)}
-        style={{ color: itemStyle(data) }}
       >
         {data.item}
       </span>
-      <button onClick={() => deleteItem(data.id)}>
+      <button
+        className="border-2 border-secondary rounded text-secondary text-sm p-2 hover:bg-secondary hover:text-white"
+        onClick={() => deleteItem(data.id)}
+      >
         Delete
       </button>
     </li>
