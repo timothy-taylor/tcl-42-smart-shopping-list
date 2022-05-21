@@ -97,9 +97,9 @@ export default function ListItem({ data, token }) {
   }
 
   return (
-    <li className={`p-2 m-1 border-l-2 border-l-${itemStyle(data)}`}>
+    <li className={`p-2 m-1 border-l-8 border-l-${itemStyle(data)}`}>
       <input
-        className="text-primary"
+        className="text-neutral"
         type="checkbox"
         checked={data.checked}
         onChange={() =>

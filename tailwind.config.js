@@ -10,13 +10,11 @@ module.exports = {
         primary: '#0a2342',
         secondary: '#96c5a8',
         neutral: '#d6ba73',
-        soon: '#90f1ef',
-        'kinda-soon': '#ffd6e0',
-        'not-soon': '#ffef9f',
+        soon: '#48e5c2',
+        'kinda-soon': '#a09be7',
+        'not-soon': '#e77474',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 };

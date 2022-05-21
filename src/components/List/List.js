@@ -5,10 +5,23 @@ import useSnapshot from '../../hooks/useSnapshot';
 import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
 
+const EmptyList = ({ token }) => (
+  <div className="flex flex-col items-center justify-center">
+    <h2 className="font-serif text-xl p-8">
+      Your shopping list is currently empty
+    </h2>
+    <Link to={`/addItem/${token}`}>
+      <button className="border-2 p-2 rounded-md border-secondary text-secondary hover:bg-secondary hover:text-white">
+        Add Item
+      </button>
+    </Link>
+  </div>
+);
+
 const FilterInput = ({ userSearch, setUserSearch }) => (
   <div className="flex justify-center items-center">
     <input
-      className="border-secondary focus:border-primary"
+      className="border-neutral focus:border-primary"
       type="text"
       placeholder="Filter items"
       aria-label="Filter items"
@@ -16,7 +29,9 @@ const FilterInput = ({ userSearch, setUserSearch }) => (
       onChange={(e) => setUserSearch(e.target.value)}
     />
     <button
-      className="p-1 text-secondary"
+      type="button"
+      className="p-1 text-secondary hover:text-primary"
+      tabIndex="0"
       aria-label="Clear filter input"
       onClick={() => setUserSearch('')}
     >
@@ -33,16 +48,7 @@ export default function List() {
   return (
     <Layout token={token}>
       {docs.length === 0 ? (
-        <>
-          <h2 className="font-serif text-xl">
-            Your shopping list is currently empty
-          </h2>
-          <Link to={`/addItem/${token}`}>
-            <button className="border-2 p-2 border-secondary text-secondary">
-              Add Item
-            </button>
-          </Link>
-        </>
+        <EmptyList token={token} />
       ) : (
         <>
           <FilterInput {...{ userSearch, setUserSearch }} />

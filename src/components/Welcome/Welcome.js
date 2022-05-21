@@ -35,13 +35,19 @@ export default function Welcome() {
       {token ? (
         <Navigate to={`/list/${token}`} replace={true} />
       ) : (
-        <>
-          <h1>Welcome to your smart shopping list</h1>
-          <button onClick={handleClick}>Create new list</button>
-          <div>- or -</div>
-          <p>Join an existing shopping list by entering a three word token.</p>
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor="tokenInput">Share token</label>
+        <div>
+          <h1 className="text-2xl text-center text-primary">
+            Welcome to your smart shopping list
+          </h1>
+          <div className="flex items-center justify-center">
+            <button className="bg-secondary rounded-md p-2 text-white" onClick={handleClick}>
+              Create new list
+            </button>
+          </div>
+          <div className="text-center p-2">- or -</div>
+          <p className="text-center p-2">Join an existing shopping list by entering a three word token.</p>
+          <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
+            <label className="text-center text-xl" htmlFor="tokenInput">Shared token</label>
             <input
               id="tokenInput"
               type="text"
@@ -53,14 +59,14 @@ export default function Welcome() {
               onChange={(e) => setUserInput(e.target.value)}
               required
             />
-            <button type="submit">Join an existing list</button>
+            <button className="p-2 bg-secondary text-white" type="submit">Join an existing list</button>
             {error && (
-              <div id="inputError" style={{ color: 'red' }}>
+              <div id="inputError" className="text-red">
                 {error}
               </div>
             )}
           </form>
-        </>
+        </div>
       )}
     </>
   );
