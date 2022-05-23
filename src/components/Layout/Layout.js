@@ -1,5 +1,13 @@
 import Navigation from '../Navigation/Navigation';
-import Header, { centeredBox } from '../Header/Header';
+
+export const centeredBox = 'max-w-md mx-auto';
+export const Header = ({ text }) => (
+  <h1
+    className={`${centeredBox} p-4 text-primary dark:text-white text-center text-2xl`}
+  >
+    {text}
+  </h1>
+);
 
 export default function Layout({ token, children }) {
   return (

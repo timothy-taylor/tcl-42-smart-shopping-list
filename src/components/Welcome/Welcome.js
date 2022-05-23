@@ -4,10 +4,11 @@ import { getToken, words } from '@the-collab-lab/shopping-list-utils';
 import { collection, query, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { parseToken } from '../../lib/util';
-import Header, { centeredBox } from '../Header/Header';
+import { Header, centeredBox } from '../Layout/Layout';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { buttonStyles } from '../../lib/util';
 
+const Spacer = () => <div className="my-4"></div>;
 const Warning = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +25,6 @@ const Warning = () => (
     />
   </svg>
 );
-const Spacer = () => <div className="my-4"></div>;
 
 export default function Welcome() {
   const { token, setToken } = useLocalStorage();
