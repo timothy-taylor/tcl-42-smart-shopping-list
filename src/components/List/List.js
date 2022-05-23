@@ -12,9 +12,7 @@ const EmptyList = ({ token }) => (
       Your shopping list is empty.
     </h2>
     <Link className="w-1/2" to={`/addItem/${token}`}>
-      <button className={buttonStyles}>
-        Add Item
-      </button>
+      <button className={buttonStyles}>Add Item</button>
     </Link>
   </div>
 );

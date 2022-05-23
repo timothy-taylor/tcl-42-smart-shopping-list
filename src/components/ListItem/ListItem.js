@@ -25,7 +25,8 @@ function itemStyle(item) {
   );
 
   // returns tailwind styles
-  if (inactive) return 'border-gray-300 hover:text-gray-600 dark:hover:text-gray-300';
+  if (inactive)
+    return 'border-gray-300 hover:text-gray-600 dark:hover:text-gray-300';
   if (item.purchaseFreq <= SOON) return 'border-soon hover:text-soon';
   if (item.purchaseFreq <= KINDA_SOON)
     return 'border-kinda-soon hover:text-kinda-soon';
@@ -101,10 +102,11 @@ export default function ListItem({ data, token }) {
       await deleteDoc(doc(db, token, id));
     }
   }
-  
+
   const containerStyle =
     'bg-white flex justify-between items-center p-2 my-4 box-border rounded-sm border-2 border-l-8 ' +
-    itemStyle(data) + ' dark:bg-primary dark:text-white';
+    itemStyle(data) +
+    ' dark:bg-primary dark:text-white';
 
   return (
     <li className={containerStyle}>

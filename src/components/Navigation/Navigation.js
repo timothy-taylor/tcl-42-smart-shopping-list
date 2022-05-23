@@ -4,7 +4,8 @@ import * as Icons from './Icons';
 function StyledNavLink({ path, text }) {
   const base = 'm-2 p-2 border-2 border-primary rounded-md';
   const active = 'text-secondary';
-  const inactive = 'font-normal text-white hover:border-secondary hover:text-secondary';
+  const inactive =
+    'font-normal text-white hover:border-secondary hover:text-secondary';
 
   return (
     <NavLink

@@ -68,7 +68,10 @@ export default function Welcome() {
             Join an existing shopping list by entering a three word token.
           </p>
           <Spacer />
-          <form className="flex flex-col p-6 border border-neutral" onSubmit={(e) => handleSubmit(e)}>
+          <form
+            className="flex flex-col p-6 border border-neutral"
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <label
               className="text-center text-xl dark:text-neutral"
               htmlFor="tokenInput"
@@ -76,7 +79,9 @@ export default function Welcome() {
               Enter shared token
             </label>
             <input
-              className={`my-2 rounded-md text-center border-2 ${error ? 'border-red-600' : 'border-neutral'} dark:text-white dark:bg-primary active:focus:border-secondary`}
+              className={`my-2 rounded-md text-center border-2 ${
+                error ? 'border-red-600' : 'border-neutral'
+              } dark:text-white dark:bg-primary active:focus:border-secondary`}
               id="tokenInput"
               type="text"
               placeholder="three word token"
@@ -91,8 +96,12 @@ export default function Welcome() {
               Join existing list
             </button>
             {error && (
-              <div id="inputError" className="mt-5 text-red-600 flex justify-center">
-                <Warning />{error}
+              <div
+                id="inputError"
+                className="mt-5 text-red-600 flex justify-center"
+              >
+                <Warning />
+                {error}
               </div>
             )}
           </form>

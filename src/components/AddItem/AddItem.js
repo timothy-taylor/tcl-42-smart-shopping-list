@@ -89,9 +89,7 @@ export default function AddItem() {
 
   return (
     <Layout token={token}>
-      <div
-        className="flex justify-center items-center dark:border-t-2 dark:border-t-secondary"
-      >
+      <div className="flex justify-center items-center dark:border-t-2 dark:border-t-secondary">
         <div className="flex justify-center items-center w-full mt-4 flex-col">
           <h2 className="p-4 font-bold text-primary dark:text-secondary">
             Add a new item to your list
