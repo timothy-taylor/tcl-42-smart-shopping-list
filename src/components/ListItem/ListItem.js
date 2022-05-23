@@ -2,6 +2,7 @@ import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 import { db } from '../../lib/firebase';
 import { DAY_IN_MILLISEC } from '../../lib/util';
+import * as Icons from './Icons';
 
 const SOON = 7;
 const KINDA_SOON = 14;
@@ -23,10 +24,12 @@ function itemStyle(item) {
     item.estimatedNextPurchaseDate,
   );
 
-  if (inactive) return 'black';
-  if (item.purchaseFreq <= SOON) return 'soon';
-  if (item.purchaseFreq <= KINDA_SOON) return 'kinda-soon';
-  return 'not-soon';
+  // returns tailwind styles
+  if (inactive) return 'border-gray-300 hover:text-gray-600 dark:hover:text-gray-300';
+  if (item.purchaseFreq <= SOON) return 'border-soon hover:text-soon';
+  if (item.purchaseFreq <= KINDA_SOON)
+    return 'border-kinda-soon hover:text-kinda-soon';
+  return 'border-not-soon hover:text-not-soon';
 }
 
 function accessibilityLabel(item) {
@@ -69,6 +72,9 @@ function getPurchaseDates(estimateInDays) {
   return [purchaseDate, estimatedNextPurchaseDate];
 }
 
+//
+//
+// this component is used inside of the map function in <List />
 export default function ListItem({ data, token }) {
   async function undoPurchase({ id }) {
     await updateDoc(doc(db, token, id), {
@@ -95,11 +101,15 @@ export default function ListItem({ data, token }) {
       await deleteDoc(doc(db, token, id));
     }
   }
+  
+  const containerStyle =
+    'bg-white flex justify-between items-center p-2 my-4 box-border rounded-sm border-2 border-l-8 ' +
+    itemStyle(data) + ' dark:bg-primary dark:text-white';
 
   return (
-    <li className={`p-2 m-1 border-l-8 border-l-${itemStyle(data)}`}>
+    <li className={containerStyle}>
       <input
-        className="text-neutral"
+        className="text-secondary dark:text-neutral focus:text-primary hover:cursor-pointer"
         type="checkbox"
         checked={data.checked}
         onChange={() =>
@@ -113,10 +123,10 @@ export default function ListItem({ data, token }) {
         {data.item}
       </span>
       <button
-        className="border-2 border-secondary rounded text-secondary text-sm p-2 hover:bg-secondary hover:text-white"
+        className="rounded-md text-secondary dark:text-neutral text-sm p-2 hover:bg-secondary hover:text-white dark:hover:bg-neutral"
         onClick={() => deleteItem(data.id)}
       >
-        Delete
+        <Icons.Delete />
       </button>
     </li>
   );

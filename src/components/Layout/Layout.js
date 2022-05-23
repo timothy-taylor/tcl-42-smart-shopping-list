@@ -1,11 +1,20 @@
 import Navigation from '../Navigation/Navigation';
 
+const centeredBox = 'max-w-md mx-auto';
+const Header = ({ text }) => (
+  <h1
+    className={`${centeredBox} p-4 text-primary dark:text-white text-center text-2xl`}
+  >
+    {text}
+  </h1>
+);
+
 export default function Layout({ token, children }) {
   return (
-    <div className="">
-      <h1 className="p-4 text-primary text-center text-4xl">Smart Shopping List</h1>
+    <>
+      <Header text="Smart Shopping List" />
       <Navigation token={token} />
-      <main>{children}</main>
-    </div>
+      <main className={`${centeredBox} pb-24`}>{children}</main>
+    </>
   );
 }

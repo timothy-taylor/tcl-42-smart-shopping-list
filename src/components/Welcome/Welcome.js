@@ -6,6 +6,37 @@ import { db } from '../../lib/firebase';
 import { parseToken } from '../../lib/util';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
+const Warning = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-6 w-6 mr-1"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+    />
+  </svg>
+);
+
+const centeredBox = 'max-w-md mx-auto';
+const Header = ({ text }) => (
+  <h1
+    className={`${centeredBox} p-4 text-primary dark:text-white text-center text-2xl`}
+  >
+    {text}
+  </h1>
+);
+
+const Spacer = () => <div className="my-4"></div>;
+
+const buttonStyles =
+  'w-full p-2 rounded-md border-2 border-primary dark:border-secondary text-primary font-bold dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary';
+
 export default function Welcome() {
   const { token, setToken } = useLocalStorage();
   const [userInput, setUserInput] = useState('');
@@ -23,7 +54,7 @@ export default function Welcome() {
     const q = query(collection(db, parsedUserInput), limit(1));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
-      setError('This token is not valid');
+      setError('The token you entered is not valid.');
       setUserInput('');
     } else {
       setToken(parsedUserInput);
@@ -35,20 +66,28 @@ export default function Welcome() {
       {token ? (
         <Navigate to={`/list/${token}`} replace={true} />
       ) : (
-        <div>
-          <h1 className="text-2xl text-center text-primary">
-            Welcome to your smart shopping list
-          </h1>
-          <div className="flex items-center justify-center">
-            <button className="bg-secondary rounded-md p-2 text-white" onClick={handleClick}>
-              Create new list
-            </button>
-          </div>
-          <div className="text-center p-2">- or -</div>
-          <p className="text-center p-2">Join an existing shopping list by entering a three word token.</p>
+        <div className={centeredBox}>
+          <Header text="Welcome to your smart shopping list!" />
+          <Spacer />
+          <button className={buttonStyles} onClick={handleClick}>
+            Create new list
+          </button>
+          <Spacer />
+          <div className="text-center dark:text-white p-4"> or </div>
+          <Spacer />
+          <p className="text-center dark:text-white pb-2">
+            Join an existing shopping list by entering a three word token.
+          </p>
+          <Spacer />
           <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
-            <label className="text-center text-xl" htmlFor="tokenInput">Shared token</label>
+            <label
+              className="text-center text-xl dark:text-neutral"
+              htmlFor="tokenInput"
+            >
+              Enter Shared token
+            </label>
             <input
+              className={`my-2 rounded-md text-center border-2 ${error ? 'border-red-600' : 'border-neutral'} dark:text-white dark:bg-primary active:focus:border-secondary`}
               id="tokenInput"
               type="text"
               placeholder="three word token"
@@ -59,10 +98,12 @@ export default function Welcome() {
               onChange={(e) => setUserInput(e.target.value)}
               required
             />
-            <button className="p-2 bg-secondary text-white" type="submit">Join an existing list</button>
+            <button className={buttonStyles} type="submit">
+              Join existing list
+            </button>
             {error && (
-              <div id="inputError" className="text-red">
-                {error}
+              <div id="inputError" className="mt-5 text-red-600 flex justify-center">
+                <Warning />{error}
               </div>
             )}
           </form>

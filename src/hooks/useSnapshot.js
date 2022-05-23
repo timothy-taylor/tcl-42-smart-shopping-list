@@ -11,6 +11,7 @@ export const isLessThan24HoursOld = (datePurchaseInMilli) => {
 };
 
 export default function useSnapshot(token) {
+  const [isLoading, setIsLoading] = useState(true);
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
@@ -29,11 +30,12 @@ export default function useSnapshot(token) {
             };
           }),
         );
+        setIsLoading(false);
       });
     }
 
     return unsubscribe;
   }, [token]);
   
-  return { docs };
+  return { docs, isLoading };
 }

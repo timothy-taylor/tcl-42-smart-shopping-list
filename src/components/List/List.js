@@ -4,14 +4,15 @@ import { normalize } from '../../lib/util';
 import useSnapshot from '../../hooks/useSnapshot';
 import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
+import * as Icons from './Icons';
 
 const EmptyList = ({ token }) => (
   <div className="flex flex-col items-center justify-center">
-    <h2 className="font-serif text-xl p-8">
-      Your shopping list is currently empty
+    <h2 className="p-8 font-serif text-center text-xl dark:text-white">
+      Your shopping list is empty.
     </h2>
     <Link to={`/addItem/${token}`}>
-      <button className="border-2 p-2 rounded-md border-secondary text-secondary hover:bg-secondary hover:text-white">
+      <button className="w-48 border-2 p-2 rounded-md border-secondary text-secondary font-bold hover:bg-secondary hover:text-white">
         Add Item
       </button>
     </Link>
@@ -19,9 +20,9 @@ const EmptyList = ({ token }) => (
 );
 
 const FilterInput = ({ userSearch, setUserSearch }) => (
-  <div className="flex justify-center items-center">
+  <div className="mt-9 flex justify-center items-center">
     <input
-      className="border-neutral focus:border-primary"
+      className="w-2/3 dark:bg-primary dark:text-white rounded-md border-neutral active:focus:border-secondary"
       type="text"
       placeholder="Filter items"
       aria-label="Filter items"
@@ -30,29 +31,34 @@ const FilterInput = ({ userSearch, setUserSearch }) => (
     />
     <button
       type="button"
-      className="p-1 text-secondary hover:text-primary"
+      className="px-1 text-neutral hover:text-secondary"
       tabIndex="0"
       aria-label="Clear filter input"
       onClick={() => setUserSearch('')}
     >
-      X
+      <Icons.X />
     </button>
   </div>
 );
 
 export default function List() {
   const { token } = useParams();
-  const { docs } = useSnapshot(token);
+  const { docs, isLoading } = useSnapshot(token);
   const [userSearch, setUserSearch] = useState('');
 
   return (
     <Layout token={token}>
-      {docs.length === 0 ? (
+      {isLoading && (
+        <div className="mt-8 font-serif text-white text-xl text-center lowercase">
+          Loading list...
+        </div>
+      )}
+      {!isLoading && docs.length === 0 ? (
         <EmptyList token={token} />
       ) : (
         <>
-          <FilterInput {...{ userSearch, setUserSearch }} />
-          <ul className="m-8">
+          {!isLoading && <FilterInput {...{ userSearch, setUserSearch }} />}
+          <ul className="pt-2 m-4">
             {docs
               .filter(({ item }) => {
                 // 1) if search input is blank / empty

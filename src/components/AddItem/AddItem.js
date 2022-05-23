@@ -10,11 +10,37 @@ import { db } from '../../lib/firebase';
 import { normalize } from '../../lib/util';
 import Layout from '../Layout/Layout';
 
-function Checkbox({ text, value, purchaseFreq, setPurchaseFreq }) {
+const Warning = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-6 w-6 mr-1"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+    />
+  </svg>
+);
+
+const StyledButton = ({ type, text }) => (
+  <button
+    className="w-full p-2 rounded-md border-2 border-primary dark:border-secondary text-primary font-bold dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary"
+    type={type}
+  >
+    {text}
+  </button>
+);
+
+function RadioButtons({ text, value, purchaseFreq, setPurchaseFreq }) {
   return (
-    <label className="font-serif lowercase">
+    <label className="lowercase dark:text-white">
       <input
-        className="my-1 mx-2 text-secondary"
+        className="m-2 text-secondary hover:cursor-pointer"
         name="frequency"
         type="radio"
         value={value}
@@ -70,42 +96,53 @@ export default function AddItem() {
     }
   }
 
+  const centeredFlexBox = 'flex justify-center items-center';
+
   return (
     <Layout token={token}>
-      <div className="flex justify-center items-center">
-        <form className="" onSubmit={(e) => handleClick(e)}>
-          <input
-            className="rounded-md focus:border-primary"
-            type="text"
-            required
-            value={itemName}
-            placeholder="item"
-            aria-label="item"
-            onChange={(e) => setItemName(e.target.value)}
-          />
-          <fieldset className="flex flex-col">
-            <legend className="text-primary">Frequency</legend>
-            <Checkbox
-              text="Soon"
-              value="7"
-              {...{ purchaseFreq, setPurchaseFreq }}
+      <div
+        className={
+          centeredFlexBox + '  dark:border-t-2 dark:border-t-secondary'
+        }
+      >
+        <div className={centeredFlexBox + ' w-full mt-4 flex-col'}>
+          <h2 className="p-4 font-bold text-primary dark:text-secondary">
+            Add a new item to your list
+          </h2>
+          <form className="" onSubmit={(e) => handleClick(e)}>
+            <input
+              className={`w-full font-serif dark:bg-primary dark:text-white ${error ? 'border-red-600' : 'border-neutral'} rounded-md focus:border-primary`}
+              type="text"
+              required
+              value={itemName}
+              placeholder="enter item name"
+              aria-label="item name"
+              onChange={(e) => setItemName(e.target.value)}
             />
-            <Checkbox
-              text="Kinda soon"
-              value="14"
-              {...{ purchaseFreq, setPurchaseFreq }}
-            />
-            <Checkbox
-              text="Not soon"
-              value="30"
-              {...{ purchaseFreq, setPurchaseFreq }}
-            />
-          </fieldset>
-          <button className="p-2 rounded-md bg-neutral text-white" type="submit">
-            Add Item
-          </button>
-        </form>
-        {error && <div className="text-red">{error}</div>}
+            <fieldset className="flex flex-col my-10">
+              <legend className="text-primary text-center font-bold dark:text-secondary">
+                Purchase frequency?
+              </legend>
+              <RadioButtons
+                text="Soon"
+                value="7"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+              <RadioButtons
+                text="Kinda soon"
+                value="14"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+              <RadioButtons
+                text="Not soon"
+                value="30"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+            </fieldset>
+            <StyledButton type="submit" text="Add Item" />
+          </form>
+          {error && <div className="flex justify-center mt-5 text-red-600"><Warning />{error}</div>}
+        </div>
       </div>
     </Layout>
   );
