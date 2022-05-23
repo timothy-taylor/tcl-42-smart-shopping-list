@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   collection,
@@ -7,7 +7,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { normalize } from '../../lib/util';
+import { normalize, buttonStyles } from '../../lib/util';
 import Layout from '../Layout/Layout';
 
 const Warning = () => (
@@ -27,20 +27,11 @@ const Warning = () => (
   </svg>
 );
 
-const StyledButton = ({ type, text }) => (
-  <button
-    className="w-full p-2 rounded-md border-2 border-primary dark:border-secondary text-primary font-bold dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary"
-    type={type}
-  >
-    {text}
-  </button>
-);
-
-function RadioButtons({ text, value, purchaseFreq, setPurchaseFreq }) {
+function RadioButton({ text, value, purchaseFreq, setPurchaseFreq }) {
   return (
-    <label className="lowercase dark:text-white">
+    <label>
       <input
-        className="m-2 text-secondary hover:cursor-pointer"
+        className="m-2 ml-4 text-secondary dark:text-neutral hover:cursor-pointer"
         name="frequency"
         type="radio"
         value={value}
@@ -49,7 +40,7 @@ function RadioButtons({ text, value, purchaseFreq, setPurchaseFreq }) {
           setPurchaseFreq(e.target.value);
         }}
       />
-      {text}
+      <span className="pl-1 lowercase dark:text-white">{text}</span>
     </label>
   );
 }
@@ -96,22 +87,20 @@ export default function AddItem() {
     }
   }
 
-  const centeredFlexBox = 'flex justify-center items-center';
-
   return (
     <Layout token={token}>
       <div
-        className={
-          centeredFlexBox + '  dark:border-t-2 dark:border-t-secondary'
-        }
+        className="flex justify-center items-center dark:border-t-2 dark:border-t-secondary"
       >
-        <div className={centeredFlexBox + ' w-full mt-4 flex-col'}>
+        <div className="flex justify-center items-center w-full mt-4 flex-col">
           <h2 className="p-4 font-bold text-primary dark:text-secondary">
             Add a new item to your list
           </h2>
-          <form className="" onSubmit={(e) => handleClick(e)}>
+          <form className="w-3/4" onSubmit={(e) => handleClick(e)}>
             <input
-              className={`w-full font-serif dark:bg-primary dark:text-white ${error ? 'border-red-600' : 'border-neutral'} rounded-md focus:border-primary`}
+              className={`w-full font-serif dark:bg-primary dark:text-white ${
+                error ? 'border-red-600' : 'border-neutral'
+              } rounded-md focus:border-primary`}
               type="text"
               required
               value={itemName}
@@ -119,29 +108,36 @@ export default function AddItem() {
               aria-label="item name"
               onChange={(e) => setItemName(e.target.value)}
             />
-            <fieldset className="flex flex-col my-10">
+            <fieldset className="flex flex-col my-10 border border-neutral rounded-md p-4">
               <legend className="text-primary text-center font-bold dark:text-secondary">
-                Purchase frequency?
+                Select purchase frequency
               </legend>
-              <RadioButtons
+              <RadioButton
                 text="Soon"
                 value="7"
                 {...{ purchaseFreq, setPurchaseFreq }}
               />
-              <RadioButtons
+              <RadioButton
                 text="Kinda soon"
                 value="14"
                 {...{ purchaseFreq, setPurchaseFreq }}
               />
-              <RadioButtons
+              <RadioButton
                 text="Not soon"
                 value="30"
                 {...{ purchaseFreq, setPurchaseFreq }}
               />
             </fieldset>
-            <StyledButton type="submit" text="Add Item" />
+            <button className={buttonStyles} type="submit">
+              Add Item
+            </button>
           </form>
-          {error && <div className="flex justify-center mt-5 text-red-600"><Warning />{error}</div>}
+          {error && (
+            <div className="flex justify-center mt-5 text-red-600">
+              <Warning />
+              {error}
+            </div>
+          )}
         </div>
       </div>
     </Layout>

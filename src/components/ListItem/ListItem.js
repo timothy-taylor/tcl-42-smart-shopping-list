@@ -109,7 +109,7 @@ export default function ListItem({ data, token }) {
   return (
     <li className={containerStyle}>
       <input
-        className="text-secondary dark:text-neutral focus:text-primary hover:cursor-pointer"
+        className="text-secondary dark:text-neutral hover:cursor-pointer hover:focus:text-primary"
         type="checkbox"
         checked={data.checked}
         onChange={() =>

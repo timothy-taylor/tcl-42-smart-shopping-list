@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { normalize } from '../../lib/util';
 import useSnapshot from '../../hooks/useSnapshot';
 import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
+import { normalize, buttonStyles } from '../../lib/util';
 import * as Icons from './Icons';
 
 const EmptyList = ({ token }) => (
@@ -11,8 +11,8 @@ const EmptyList = ({ token }) => (
     <h2 className="p-8 font-serif text-center text-xl dark:text-white">
       Your shopping list is empty.
     </h2>
-    <Link to={`/addItem/${token}`}>
-      <button className="w-48 border-2 p-2 rounded-md border-secondary text-secondary font-bold hover:bg-secondary hover:text-white">
+    <Link className="w-1/2" to={`/addItem/${token}`}>
+      <button className={buttonStyles}>
         Add Item
       </button>
     </Link>

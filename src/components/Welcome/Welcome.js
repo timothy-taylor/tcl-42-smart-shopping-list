@@ -4,7 +4,9 @@ import { getToken, words } from '@the-collab-lab/shopping-list-utils';
 import { collection, query, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { parseToken } from '../../lib/util';
+import Header, { centeredBox } from '../Header/Header';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import { buttonStyles } from '../../lib/util';
 
 const Warning = () => (
   <svg
@@ -22,20 +24,7 @@ const Warning = () => (
     />
   </svg>
 );
-
-const centeredBox = 'max-w-md mx-auto';
-const Header = ({ text }) => (
-  <h1
-    className={`${centeredBox} p-4 text-primary dark:text-white text-center text-2xl`}
-  >
-    {text}
-  </h1>
-);
-
 const Spacer = () => <div className="my-4"></div>;
-
-const buttonStyles =
-  'w-full p-2 rounded-md border-2 border-primary dark:border-secondary text-primary font-bold dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary';
 
 export default function Welcome() {
   const { token, setToken } = useLocalStorage();
@@ -79,12 +68,12 @@ export default function Welcome() {
             Join an existing shopping list by entering a three word token.
           </p>
           <Spacer />
-          <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
+          <form className="flex flex-col p-6 border border-neutral" onSubmit={(e) => handleSubmit(e)}>
             <label
               className="text-center text-xl dark:text-neutral"
               htmlFor="tokenInput"
             >
-              Enter Shared token
+              Enter shared token
             </label>
             <input
               className={`my-2 rounded-md text-center border-2 ${error ? 'border-red-600' : 'border-neutral'} dark:text-white dark:bg-primary active:focus:border-secondary`}
