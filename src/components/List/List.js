@@ -5,6 +5,7 @@ import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
 import { normalize, buttonStyles } from '../../lib/util';
 import * as Icons from './Icons';
+import IconText from '../Accessibility/Icon';
 
 const EmptyList = ({ token }) => (
   <div className="flex flex-col items-center justify-center">
@@ -34,6 +35,7 @@ const FilterInput = ({ userSearch, setUserSearch }) => (
       aria-label="Clear filter input"
       onClick={() => setUserSearch('')}
     >
+      <IconText text='clear filter'/>
       <Icons.X />
     </button>
   </div>
