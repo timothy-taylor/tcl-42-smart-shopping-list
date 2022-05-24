@@ -48,7 +48,7 @@ export default function List() {
     <Layout token={token}>
       {isLoading && (
         <div className="mt-8 font-serif text-white text-xl text-center lowercase">
-          Loading list...
+          Loading list ...
         </div>
       )}
       {!isLoading && docs.length === 0 ? (

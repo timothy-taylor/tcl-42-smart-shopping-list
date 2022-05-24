@@ -9,23 +9,7 @@ import {
 import { db } from '../../lib/firebase';
 import { normalize, buttonStyles } from '../../lib/util';
 import Layout from '../Layout/Layout';
-
-const Warning = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 mr-1"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-    />
-  </svg>
-);
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function RadioButton({ text, value, purchaseFreq, setPurchaseFreq }) {
   return (
@@ -104,6 +88,8 @@ export default function AddItem() {
               value={itemName}
               placeholder="enter item name"
               aria-label="item name"
+              aria-errormessage="inputError"
+              aria-invalid={error ? true : false}
               onChange={(e) => setItemName(e.target.value)}
             />
             <fieldset className="flex flex-col my-10 border border-neutral rounded-md p-4">
@@ -130,12 +116,7 @@ export default function AddItem() {
               Add Item
             </button>
           </form>
-          {error && (
-            <div className="flex justify-center mt-5 text-red-600">
-              <Warning />
-              {error}
-            </div>
-          )}
+          {error && <ErrorMessage error={error} id="inputError" />}
         </div>
       </div>
     </Layout>
