@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 
 const BaseStyledApplication = () => (
-  <div className="min-h-screen dark:bg-primary">
+  <div className="min-h-screen bg-primary">
     <App />
   </div>
 );

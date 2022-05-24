@@ -15,7 +15,7 @@ function RadioButton({ text, value, purchaseFreq, setPurchaseFreq }) {
   return (
     <label>
       <input
-        className="m-2 ml-4 text-secondary dark:text-neutral hover:cursor-pointer"
+        className="m-2 ml-4 text-neutral hover:cursor-pointer"
         name="frequency"
         type="radio"
         value={value}
@@ -24,7 +24,7 @@ function RadioButton({ text, value, purchaseFreq, setPurchaseFreq }) {
           setPurchaseFreq(e.target.value);
         }}
       />
-      <span className="pl-1 lowercase dark:text-white">{text}</span>
+      <span className="pl-1 lowercase text-white">{text}</span>
     </label>
   );
 }
@@ -73,14 +73,14 @@ export default function AddItem() {
 
   return (
     <Layout token={token}>
-      <div className="flex justify-center items-center dark:border-t-2 dark:border-t-secondary">
+      <div className="flex justify-center items-center border-t-2 border-t-secondary">
         <div className="flex justify-center items-center w-full mt-4 flex-col">
-          <h2 className="p-4 font-bold text-primary dark:text-secondary">
+          <h2 className="p-4 font-bold text-secondary">
             Add a new item to your list
           </h2>
           <form className="w-3/4" onSubmit={(e) => handleClick(e)}>
             <input
-              className={`w-full font-serif dark:bg-primary dark:text-white ${
+              className={`w-full font-serif bg-primary text-white ${
                 error ? 'border-red-600' : 'border-neutral'
               } rounded-md focus:border-primary`}
               type="text"
@@ -93,7 +93,7 @@ export default function AddItem() {
               onChange={(e) => setItemName(e.target.value)}
             />
             <fieldset className="flex flex-col my-10 border border-neutral rounded-md p-4">
-              <legend className="text-primary text-center font-bold dark:text-secondary">
+              <legend className="text-center font-bold text-secondary">
                 Select purchase frequency
               </legend>
               <RadioButton

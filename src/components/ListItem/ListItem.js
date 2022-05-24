@@ -26,7 +26,7 @@ function itemStyle(item) {
 
   // returns tailwind styles
   if (inactive)
-    return 'border-gray-300 hover:text-gray-600 dark:hover:text-gray-300';
+    return 'border-gray-300 hover:text-gray-300';
   if (item.purchaseFreq <= SOON) return 'border-soon hover:text-soon';
   if (item.purchaseFreq <= KINDA_SOON)
     return 'border-kinda-soon hover:text-kinda-soon';
@@ -106,12 +106,12 @@ export default function ListItem({ data, token }) {
   const containerStyle =
     'bg-white flex justify-between items-center p-2 my-4 box-border rounded-sm border-2 border-l-8 ' +
     itemStyle(data) +
-    ' dark:bg-primary dark:text-white';
+    ' bg-primary text-white';
 
   return (
     <li className={containerStyle}>
       <input
-        className="text-secondary dark:text-neutral hover:cursor-pointer hover:focus:text-primary"
+        className="text-secondary text-neutral hover:cursor-pointer hover:focus:text-primary"
         type="checkbox"
         checked={data.checked}
         onChange={() =>
@@ -125,7 +125,7 @@ export default function ListItem({ data, token }) {
         {data.item}
       </span>
       <button
-        className="rounded-md text-secondary dark:text-neutral text-sm p-2 hover:bg-secondary hover:text-white dark:hover:bg-neutral"
+        className="rounded-md text-neutral text-sm p-2 hover:bg-neutral"
         onClick={() => deleteItem(data.id)}
       >
         <Icons.Delete />

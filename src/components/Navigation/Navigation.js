@@ -18,7 +18,7 @@ function StyledNavLink({ path, text }) {
 }
 
 export default function Navigation({ token }) {
-  const darkMode = 'dark:border-t-2 dark:border-secondary';
+  const darkMode = 'border-t-2 border-secondary';
   const containerStyle =
     'w-full fixed bottom-0 bg-primary flex items-center justify-center ' +
     darkMode;

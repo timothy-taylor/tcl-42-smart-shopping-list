@@ -8,7 +8,7 @@ import * as Icons from './Icons';
 
 const EmptyList = ({ token }) => (
   <div className="flex flex-col items-center justify-center">
-    <h2 className="p-8 font-serif text-center text-xl dark:text-white">
+    <h2 className="p-8 font-serif text-center text-xl text-white">
       Your shopping list is empty.
     </h2>
     <Link className="w-1/2" to={`/addItem/${token}`}>
@@ -20,7 +20,7 @@ const EmptyList = ({ token }) => (
 const FilterInput = ({ userSearch, setUserSearch }) => (
   <div className="mt-9 flex justify-center items-center">
     <input
-      className="w-2/3 dark:bg-primary dark:text-white rounded-md border-neutral active:focus:border-secondary"
+      className="w-2/3 bg-primary text-white rounded-md border-neutral active:focus:border-secondary"
       type="text"
       placeholder="Filter items"
       aria-label="Filter items"

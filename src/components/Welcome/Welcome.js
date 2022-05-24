@@ -47,9 +47,9 @@ export default function Welcome() {
             Create new list
           </button>
           <Spacer />
-          <div className="text-center dark:text-white p-4"> or </div>
+          <div className="text-center text-white p-4"> or </div>
           <Spacer />
-          <p className="text-center dark:text-white pb-2">
+          <p className="text-center text-white pb-2">
             Join an existing shopping list by entering a three word token.
           </p>
           <Spacer />
@@ -58,7 +58,7 @@ export default function Welcome() {
             onSubmit={(e) => handleSubmit(e)}
           >
             <label
-              className="text-center text-xl dark:text-neutral"
+              className="text-center text-xl text-neutral"
               htmlFor="tokenInput"
             >
               Enter shared token
@@ -66,7 +66,7 @@ export default function Welcome() {
             <input
               className={`my-2 rounded-md text-center border-2 ${
                 error ? 'border-red-600' : 'border-neutral'
-              } dark:text-white dark:bg-primary active:focus:border-secondary`}
+              } text-white bg-primary active:focus:border-secondary`}
               id="tokenInput"
               type="text"
               placeholder="three word token"
