@@ -104,7 +104,7 @@ export default function ListItem({ data, token }) {
   }
 
   const containerStyle =
-    'bg-white flex justify-between items-center p-2 my-4 box-border rounded-sm border-2 border-l-8 ' +
+    'flex justify-between items-center p-2 my-4 box-border rounded-sm border-2 border-l-8 ' +
     itemStyle(data) +
     ' bg-primary text-white';
 
@@ -125,7 +125,7 @@ export default function ListItem({ data, token }) {
         {data.item}
       </span>
       <button
-        className="rounded-md text-neutral text-sm p-2 hover:bg-neutral"
+        className="rounded-md text-neutral text-sm p-2 hover:bg-neutral hover:text-white"
         onClick={() => deleteItem(data.id)}
       >
         <Icons.Delete />
