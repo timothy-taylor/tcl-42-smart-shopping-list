@@ -46,7 +46,7 @@ export default function AddItem() {
     return items.some((item) => normalize(item) === normalize(itemName));
   }
 
-  async function handleClick(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (await hasDuplicates()) {
@@ -78,7 +78,7 @@ export default function AddItem() {
           <h2 className="p-4 font-bold text-secondary">
             Add a new item to your list
           </h2>
-          <form className="w-3/4" onSubmit={(e) => handleClick(e)}>
+          <form className="w-3/4" onSubmit={(e) => handleSubmit(e)}>
             <input
               className={`w-full font-serif bg-primary text-white ${
                 error ? 'border-red-600' : 'border-neutral'

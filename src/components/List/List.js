@@ -5,7 +5,6 @@ import ListItem from '../ListItem/ListItem';
 import Layout from '../Layout/Layout';
 import { normalize, buttonStyles } from '../../lib/util';
 import * as Icons from './Icons';
-import IconText from '../Accessibility/Icon';
 
 const EmptyList = ({ token }) => (
   <div className="flex flex-col items-center justify-center">
@@ -23,19 +22,18 @@ const FilterInput = ({ userSearch, setUserSearch }) => (
     <input
       className="w-2/3 bg-primary text-white rounded-md border-neutral active:focus:border-secondary"
       type="text"
-      placeholder="Filter items"
-      aria-label="Filter items"
+      placeholder="Search items"
+      aria-label="Search items"
       value={userSearch}
       onChange={(e) => setUserSearch(e.target.value)}
     />
     <button
       type="button"
-      className="px-1 text-neutral hover:text-secondary"
-      tabIndex="0"
-      aria-label="Clear filter input"
+      className={`px-1 ${userSearch !== '' ? 'text-neutral hover:text-secondary' : 'text-gray-500'}`}
+      aria-label="Clear search input"
+      disabled={userSearch === ''}
       onClick={() => setUserSearch('')}
     >
-      <IconText text='clear filter'/>
       <Icons.X />
     </button>
   </div>

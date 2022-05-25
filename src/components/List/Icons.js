@@ -4,6 +4,8 @@ export const X = () => (
     className="h-6 w-6"
     viewBox="0 0 20 20"
     fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
   >
     <path
       fillRule="evenodd"

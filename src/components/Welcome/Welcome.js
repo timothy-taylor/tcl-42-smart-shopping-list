@@ -3,10 +3,9 @@ import { Navigate } from 'react-router-dom';
 import { getToken, words } from '@the-collab-lab/shopping-list-utils';
 import { collection, query, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { parseToken } from '../../lib/util';
+import { parseToken, buttonStyles } from '../../lib/util';
 import { Header, centeredBox } from '../Layout/Layout';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import { buttonStyles } from '../../lib/util';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const Spacer = () => <div className="my-4"></div>;
@@ -40,7 +39,7 @@ export default function Welcome() {
       {token ? (
         <Navigate to={`/list/${token}`} replace={true} />
       ) : (
-        <div className={centeredBox}>
+        <main className={centeredBox + ' w-3/4'}>
           <Header text="Welcome to your smart shopping list!" />
           <Spacer />
           <button className={buttonStyles} onClick={handleClick}>
@@ -54,7 +53,7 @@ export default function Welcome() {
           </p>
           <Spacer />
           <form
-            className="flex flex-col p-6 border border-neutral"
+            className="flex flex-col p-6 border border-neutral rounded-md"
             onSubmit={(e) => handleSubmit(e)}
           >
             <label
@@ -81,8 +80,8 @@ export default function Welcome() {
               Join existing list
             </button>
             {error && <ErrorMessage error={error} id="inputError" />}
-            </form>
-        </div>
+          </form>
+        </main>
       )}
     </>
   );

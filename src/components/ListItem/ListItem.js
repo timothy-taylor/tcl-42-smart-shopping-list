@@ -3,7 +3,6 @@ import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 import { db } from '../../lib/firebase';
 import { DAY_IN_MILLISEC } from '../../lib/util';
 import * as Icons from './Icons';
-import IconText from '../Accessibility/Icon';
 
 const SOON = 7;
 const KINDA_SOON = 14;
@@ -129,8 +128,8 @@ export default function ListItem({ data, token }) {
         className="rounded-md text-neutral text-sm p-2 hover:bg-neutral hover:text-white"
         onClick={() => deleteItem(data.id)}
       >
-        <IconText text='delete item'/>
         <Icons.Delete />
+        <span className="sr-only">Delete item</span>
       </button>
     </li>
   );

@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import * as Icons from './Icons';
-import IconText from '../Accessibility/Icon';
 
 function StyledNavLink({ path, icon, text }) {
   const base = 'm-2 p-2 border-2 border-primary rounded-md';
@@ -13,7 +12,7 @@ function StyledNavLink({ path, icon, text }) {
       className={({ isActive }) => `${base} ${isActive ? active : inactive}`}
       to={path}
     >
-      {icon} <IconText text={text} />
+      {icon} <span className="sr-only">{text}</span>
     </NavLink>
   );
 }
