@@ -39,7 +39,7 @@ export default function Welcome() {
       {token ? (
         <Navigate to={`/list/${token}`} replace={true} />
       ) : (
-        <main className={centeredBox + ' w-3/4'}>
+        <main className={centeredBox + ' w-3/4 pb-6 md:pt-16'}>
           <Header text="Welcome to your smart shopping list!" />
           <Spacer />
           <button className={buttonStyles} onClick={handleClick}>
