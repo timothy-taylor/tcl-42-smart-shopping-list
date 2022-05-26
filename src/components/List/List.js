@@ -29,7 +29,11 @@ const FilterInput = ({ userSearch, setUserSearch }) => (
     />
     <button
       type="button"
-      className={`px-1 ${userSearch !== '' ? 'text-neutral hover:text-secondary' : 'text-gray-500'}`}
+      className={`px-1 ${
+        userSearch === ''
+          ? 'text-gray-500'
+          : 'text-neutral hover:text-secondary'
+      }`}
       aria-label="Clear search input"
       disabled={userSearch === ''}
       onClick={() => setUserSearch('')}
@@ -44,18 +48,23 @@ export default function List() {
   const { docs, isLoading } = useSnapshot(token);
   const [userSearch, setUserSearch] = useState('');
 
-  return (
-    <Layout token={token}>
-      {isLoading && (
+  if (isLoading) {
+    return (
+      <Layout token={token}>
         <div className="mt-8 font-serif text-white text-xl text-center lowercase">
           Loading list ...
         </div>
-      )}
-      {!isLoading && docs.length === 0 ? (
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout token={token}>
+      {docs.length === 0 ? (
         <EmptyList token={token} />
       ) : (
         <>
-          {!isLoading && <FilterInput {...{ userSearch, setUserSearch }} />}
+          <FilterInput {...{ userSearch, setUserSearch }} />
           <ul className="pt-2 m-4">
             {docs
               .filter(({ item }) => {

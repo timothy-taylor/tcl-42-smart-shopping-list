@@ -3,7 +3,7 @@ import * as Icons from './Icons';
 
 function StyledNavLink({ path, icon, text }) {
   const base = 'm-2 p-2 border-2 border-primary rounded-md';
-  const active = 'text-secondary';
+  const active = 'text-secondary pointer-events-none';
   const inactive =
     'font-normal text-white hover:border-secondary hover:text-secondary';
 
