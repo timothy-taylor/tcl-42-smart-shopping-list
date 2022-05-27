@@ -4,11 +4,10 @@
 
 ## What is this project?
 
-This is a smart shopping app developed by a group of three developers under the [collab lab](https://the-collab-lab.codes/about-us/) mentorship program. This stylish app allows users to keep track of the items they purchase and how frequent they purchase those items. This app is accessibility friendly. 
+This is a smart shopping app developed by a group of three developers under [The Collab Lab](https://the-collab-lab.codes/about-us/) mentorship program. This sleek app allows users to keep track of the items they purchase and learns the purchase frequency those items. This app is mobile and accessibility (a11y) friendly. 
 
 ## How does it work?
-As a user, you will need to create a new shopping list and get your three word token. Then you will be able to add items to your shopping list which will be saved to your token. Each time you buy and item, the app will keep track of your purchase frequency. If an item is purchased more frequently, then that item will be at the top of your list. 
-
+As a user, you can create a shopping list which is associated with a three word token. You can also use a shared token to access a shopping list. Once inside your list, you can add/delete items to/from your shopping list. Each time you buy an item the app will estimate and log the item's next purchase date. The list is sorted by purchase frequency of the items with color styles and accessibility labels for the different tiers of purchase frequencies (soon, kind-of-soon, not-soon, inactive).
 
 ## Demo
 
