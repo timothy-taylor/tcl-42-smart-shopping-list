@@ -1,14 +1,13 @@
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 import { db } from '../../lib/firebase';
-import { DAY_IN_MILLISEC } from '../../lib/util';
+import { calculateEstimate, DAY_IN_MILLISEC } from '../../lib/util';
 import * as Icons from './Icons';
 
 const SOON = 7;
 const KINDA_SOON = 14;
 
 function isInactive(totalPurchases, purchaseDate, estimatedNextPurchaseDate) {
-  if (totalPurchases < 2) return true;
+  if (totalPurchases < 1) return true;
 
   const timeElapsed = new Date(purchaseDate).getTime() - Date.now();
   const estiDate = new Date(estimatedNextPurchaseDate);
@@ -24,7 +23,6 @@ function itemStyle(item) {
     item.estimatedNextPurchaseDate,
   );
 
-  // returns tailwind styles
   if (inactive)
     return 'border-gray-300 hover:text-gray-300';
   if (item.purchaseFreq <= SOON) return 'border-soon hover:text-soon';
