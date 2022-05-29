@@ -13,7 +13,7 @@ function App() {
         <Route path="/addItem/:token" element={<AddItem />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;

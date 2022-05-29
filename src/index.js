@@ -3,4 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const BaseStyledApplication = () => (
+  <div className="min-h-screen bg-primary">
+    <App />
+  </div>
+);
+
+ReactDOM.render(<BaseStyledApplication />, document.getElementById('root'));

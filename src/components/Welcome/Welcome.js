@@ -3,8 +3,12 @@ import { Navigate } from 'react-router-dom';
 import { getToken, words } from '@the-collab-lab/shopping-list-utils';
 import { collection, query, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { parseToken } from '../../lib/util';
+import { parseToken, buttonStyles } from '../../lib/util';
+import { Header, centeredBox } from '../Layout/Layout';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+
+const Spacer = () => <div className="my-4"></div>;
 
 export default function Welcome() {
   const { token, setToken } = useLocalStorage();
@@ -23,7 +27,7 @@ export default function Welcome() {
     const q = query(collection(db, parsedUserInput), limit(1));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
-      setError('This token is not valid');
+      setError('The token you entered is not valid.');
       setUserInput('');
     } else {
       setToken(parsedUserInput);
@@ -35,14 +39,33 @@ export default function Welcome() {
       {token ? (
         <Navigate to={`/list/${token}`} replace={true} />
       ) : (
-        <>
-          <h1>Welcome to your smart shopping list</h1>
-          <button onClick={handleClick}>Create new list</button>
-          <div>- or -</div>
-          <p>Join an existing shopping list by entering a three word token.</p>
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor="tokenInput">Share token</label>
+        <main className={centeredBox + ' w-3/4 pb-6 md:pt-16'}>
+          <Header text="Welcome to your smart shopping list!" />
+          <Spacer />
+          <button className={buttonStyles} onClick={handleClick}>
+            Create new list
+          </button>
+          <Spacer />
+          <div className="text-center text-white p-4"> or </div>
+          <Spacer />
+          <p className="text-center text-white pb-2">
+            Join an existing shopping list by entering a three word token.
+          </p>
+          <Spacer />
+          <form
+            className="flex flex-col p-6 border border-neutral rounded-md"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <label
+              className="text-center text-xl text-neutral"
+              htmlFor="tokenInput"
+            >
+              Enter shared token
+            </label>
             <input
+              className={`my-2 rounded-md text-center border-2 ${
+                error ? 'border-red-600' : 'border-neutral'
+              } text-white bg-primary active:focus:border-secondary`}
               id="tokenInput"
               type="text"
               placeholder="three word token"
@@ -53,14 +76,12 @@ export default function Welcome() {
               onChange={(e) => setUserInput(e.target.value)}
               required
             />
-            <button type="submit">Join an existing list</button>
-            {error && (
-              <div id="inputError" style={{ color: 'red' }}>
-                {error}
-              </div>
-            )}
+            <button className={buttonStyles} type="submit">
+              Join existing list
+            </button>
+            {error && <ErrorMessage error={error} id="inputError" />}
           </form>
-        </>
+        </main>
       )}
     </>
   );

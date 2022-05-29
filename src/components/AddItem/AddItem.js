@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   collection,
@@ -7,13 +7,15 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { normalize } from '../../lib/util';
+import { normalize, buttonStyles } from '../../lib/util';
 import Layout from '../Layout/Layout';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-function Checkbox({text, value, purchaseFreq, setPurchaseFreq}) {
+function RadioButton({ text, value, purchaseFreq, setPurchaseFreq }) {
   return (
     <label>
       <input
+        className="m-2 ml-4 text-neutral hover:cursor-pointer"
         name="frequency"
         type="radio"
         value={value}
@@ -22,7 +24,7 @@ function Checkbox({text, value, purchaseFreq, setPurchaseFreq}) {
           setPurchaseFreq(e.target.value);
         }}
       />
-      {text}
+      <span className="pl-1 lowercase text-white">{text}</span>
     </label>
   );
 }
@@ -44,7 +46,7 @@ export default function AddItem() {
     return items.some((item) => normalize(item) === normalize(itemName));
   }
 
-  async function handleClick(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (await hasDuplicates()) {
@@ -71,24 +73,52 @@ export default function AddItem() {
 
   return (
     <Layout token={token}>
-      <form onSubmit={(e) => handleClick(e)}>
-        <input
-          type="text"
-          required
-          value={itemName}
-          placeholder="item"
-          aria-label="item"
-          onChange={(e) => setItemName(e.target.value)}
-        />
-        <fieldset>
-          <legend>Frequency</legend>
-          <Checkbox text="Soon" value="7" {...{purchaseFreq, setPurchaseFreq}} />
-          <Checkbox text="Kinda soon" value="14" {...{purchaseFreq, setPurchaseFreq}} />
-          <Checkbox text="Not soon" value="30" {...{purchaseFreq, setPurchaseFreq}} />
-        </fieldset>
-        <button type="submit">Add Data</button>
-      </form>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <div className="flex justify-center items-center border-t-2 border-t-secondary">
+        <div className="flex justify-center items-center w-full mt-4 flex-col">
+          <h2 className="p-4 font-bold text-secondary">
+            Add a new item to your list
+          </h2>
+          <form className="w-3/4" onSubmit={(e) => handleSubmit(e)}>
+            <input
+              className={`w-full font-serif bg-primary text-white ${
+                error ? 'border-red-600' : 'border-neutral'
+              } rounded-md focus:border-primary`}
+              type="text"
+              required
+              value={itemName}
+              placeholder="enter item name"
+              aria-label="item name"
+              aria-errormessage="inputError"
+              aria-invalid={error ? true : false}
+              onChange={(e) => setItemName(e.target.value)}
+            />
+            <fieldset className="flex flex-col my-10 border border-neutral rounded-md p-4">
+              <legend className="text-center font-bold text-secondary">
+                Select purchase frequency
+              </legend>
+              <RadioButton
+                text="Soon"
+                value="7"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+              <RadioButton
+                text="Kinda soon"
+                value="14"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+              <RadioButton
+                text="Not soon"
+                value="30"
+                {...{ purchaseFreq, setPurchaseFreq }}
+              />
+            </fieldset>
+            <button className={buttonStyles} type="submit">
+              Add Item
+            </button>
+          </form>
+          {error && <ErrorMessage error={error} id="inputError" />}
+        </div>
+      </div>
     </Layout>
   );
 }
