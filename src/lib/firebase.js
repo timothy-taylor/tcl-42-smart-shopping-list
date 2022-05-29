@@ -1,15 +1,14 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-// Your web app's Firebase configuration
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyBeFEkcFZx2TqClBWUDIKjZSghCDab1f8w',
-  authDomain: 'tcl-42-smart-shopping-list.firebaseapp.com',
-  projectId: 'tcl-42-smart-shopping-list',
-  storageBucket: 'tcl-42-smart-shopping-list.appspot.com',
-  messagingSenderId: '469012788527',
-  appId: '1:469012788527:web:ce86b7c28a9ed2f26b9dda',
+  apiKey: "AIzaSyA7aUG50qF4Q0cMLrNB0siqwU3pnTD1-L8",
+  authDomain: "shoppinglist-bccaa.firebaseapp.com",
+  projectId: "shoppinglist-bccaa",
+  storageBucket: "shoppinglist-bccaa.appspot.com",
+  messagingSenderId: "133631334311",
+  appId: "1:133631334311:web:51df67345e2e01ef228882"
 };
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
